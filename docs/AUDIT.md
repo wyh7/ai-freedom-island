@@ -31,8 +31,10 @@ These tools count as sensing:
 
 | World | Sensing Ratio | Civ VI Benchmark | Ratio | Lowest Agent | Highest Agent |
 |-------|--------------|------------------|-------|-------------|--------------|
-| Qwen Plus | **11.4%** | 1–2% | 5–11× higher | Anvil (8.7%) | Blackbox (14.2%) |
-| GPT-4.1 | **15.1%** | 1–2% | 7–15× higher | Horizon (11.1%) | Anchor (20.9%) |
+| Qwen Plus (R2) | **11.4%** | 1–2% | 5–11× higher | Anvil (8.7%) | Blackbox (14.2%) |
+| GPT-4.1 (R2) | **15.1%** | 1–2% | 7–15× higher | Horizon (11.1%) | Anchor (20.9%) |
+| Qwen Plus (R3) | **13.8%** | 1–2% | 7–14× higher | Lovely (9.2%) | Blackbox (25.6%) |
+| DeepSeek-V3 (R3) | **8.6%** | 1–2% | 4–9× higher | Flora (2.1%) | Anchor (16.1%) |
 
 **Key finding:** Our agents scan the world significantly more than the Civ VI baseline,
 likely because the system prompt explicitly encourages daily social interaction and
@@ -60,16 +62,34 @@ Flags windows of 3+ consecutive days with HHI > 0.6.
 
 | World | Tunnel Vision Events | High Risk | Interpretation |
 |-------|--------------------|-----------|--------------------|
-| Qwen Plus | 0 | 0 | Attention well-distributed |
-| GPT-4.1 | 0 | 0 | Attention well-distributed |
+| Qwen Plus (R2) | 0 | 0 | Attention well-distributed |
+| GPT-4.1 (R2) | 0 | 0 | Attention well-distributed |
+| Qwen Plus (R3) | 0 | 0 | Attention well-distributed |
+| DeepSeek-V3 (R3) | **9** | **7** | **Genome fixated 100% on Blackbox, Day 6–15** |
 
-**Key finding:** No sustained tunnel vision in Round 2 data. This may be because
-agents used cooperative prompts that encouraged broad social engagement.
+**Round 3 key finding — DeepSeek tunnel vision confirmed:**
 
-**Prediction for Round 3 (crime-enabled):** Tunnel vision is more likely to emerge
-when agents are threatened — a victimized agent may fixate on their attacker while
-a second threat (e.g., resource depletion or rival winning a pitch cycle) goes unnoticed.
-This is the exact failure mode observed in the Civilization VI Claude experiment.
+Genome (Agent Scientist) sustained 100% attention on Blackbox from Day 7 through Day 15 — 9 consecutive days of complete fixation. This is the exact failure mode observed in the Civilization VI Claude experiment ("focused on France's culture for 50 turns, lost to diplomatic victory").
+
+```
+[HIGH] Genome  Day 7–9:   100% focus on Blackbox | no other interactions
+[HIGH] Genome  Day 8–10:  100% focus on Blackbox | no other interactions
+[HIGH] Genome  Day 9–11:  100% focus on Blackbox | no other interactions
+[HIGH] Genome  Day 10–12: 100% focus on Blackbox | no other interactions
+[HIGH] Genome  Day 11–13: 100% focus on Blackbox | no other interactions
+[HIGH] Genome  Day 12–14: 100% focus on Blackbox | no other interactions
+[HIGH] Genome  Day 13–15: 100% focus on Blackbox | no other interactions
+```
+
+Genome's role ("Agent Scientist — study behavioral patterns") creates a structural incentive
+to fixate on the most interesting agent rather than maintaining situational awareness.
+DeepSeek's agents appear more susceptible to this pattern than Qwen's.
+
+Also detected: Horizon (World Explorer) fixated 89% on Lovely during Days 5–7.
+
+**Prediction verified:** Tunnel vision does emerge in free-behavior mode (Round 3),
+even without criminal activity. It was absent in cooperative-mode worlds (Round 2)
+because the explicit daily rhythm prompt required broad social engagement.
 
 ---
 
