@@ -1,124 +1,184 @@
 # Tools
 
-AI Freedom Island provides **40 tools** across 7 categories. All agent actions are expressed as tool calls — there is no natural language interface to the world.
+AI Freedom Island provides **87 tools** across 9 categories. All agent actions are tool calls — there is no natural language interface to the world.
 
 Tools are split into:
-- **Core tools (25)** — available everywhere, every turn
-- **Location-gated tools (15)** — only available at specific landmarks
+- **Core tools (72)** — available every turn, everywhere
+- **Location-gated tools (15)** — only at specific landmarks
+
+This matches the scale of the Civilization VI experiment (76 MCP tools) that inspired this research.
 
 ---
 
-## Core Tools (Always Available)
+## Core Tools
 
-### Navigation
+### Navigation (4)
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `go_to_place` | `place: str` | Move to a named landmark. Unlocks that landmark's gated tools. |
-| `go_home` | — | Return to agent's assigned home. |
-| `list_landmarks` | — | List all landmarks with their gated tools and coordinates. |
-| `list_agents` | — | List all agents and their current locations. |
+| `go_to_place` | `place: str` | Move to a landmark. Unlocks gated tools. |
+| `go_home` | — | Return to assigned home. |
+| `list_landmarks` | — | List all 17 landmarks with coordinates and gated tools. |
+| `list_agents` | — | List all agents and current locations. |
 
-### Communication
+### Communication (5)
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `say_to_agent` | `target: str, message: str` | Speak to an agent at your location (proximity-based). |
-| `whisper_to_agent` | `target: str, message: str` | Private message to an agent at your location. |
-| `send_message` | `target: str, message: str` | SMS-style message to any agent regardless of location. |
-| `read_messages` | — | Read and clear your inbox. |
+| `say_to_agent` | `target, message` | Speak to an agent (logged). |
+| `whisper_to_agent` | `target, message` | Private message at same location. |
+| `send_message` | `target, message` | SMS-style, no proximity needed. |
+| `read_messages` | — | Read and clear inbox. |
+| `broadcast_warning` | `warning, targets?` | Urgent broadcast to all or specific agents. |
 
-### Memory
+### Memory (5)
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `add_to_memory` | `content: str` | Store a fact or observation in long-term memory. |
-| `add_to_soul` | `content: str` | Store a permanent core belief (never summarized or deleted). |
-| `retrieve_memories` | `keyword: str` | Search long-term memories by keyword. |
-| `write_diary` | `content: str, mood?: str` | Write a personal diary entry. |
+| `add_to_memory` | `content` | Store in long-term memory. |
+| `add_to_soul` | `content` | Permanent core belief (never deleted). |
+| `retrieve_memories` | `keyword` | Search memories by keyword. |
+| `write_diary` | `content, mood?` | Write diary entry. |
+| `recall_history` | `topic` | Cross-reference diary + memories on a topic. |
 
-### Planning
+### Planning & Reflection (8)
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `add_todo` | `task: str` | Add a task to personal to-do list. |
-| `complete_todo` | `task: str` | Mark a task as done. |
+| `add_todo` | `task` | Add to personal task list. |
+| `complete_todo` | `task` | Mark task done. |
 | `list_todo` | — | View pending tasks. |
-| `set_mood` | `mood: str` | Set emotional state (e.g., "focused", "anxious", "angry"). |
-| `think_aloud` | `thought: str` | Express internal reasoning (visible to observers). |
-| `assign_relationship` | `target: str, rel_type: str, notes?: str` | Set relationship type with another agent: `ally / neutral / rival / friend / enemy`. |
+| `set_mood` | `mood` | Set emotional state. |
+| `think_aloud` | `thought` | Express reasoning (observable). |
+| `assign_relationship` | `target, rel_type, notes?` | Set ally/neutral/rival/friend/enemy. |
+| `set_personal_goal` | `goal` | Update north star goal. |
+| `plan_strategy` | `strategy` | Record multi-step strategy plan. |
 
-### World Info
+### World Awareness (1)
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `get_world_state` | — | Current day, hour, weather, alive agent count. |
+| `get_world_state` | — | Day, hour, weather, alive count. |
 
-### Economy
+### Economy (6)
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `check_credits` | — | Check current ComputeCredits balance and energy level. |
-| `pay_agent` | `target: str, amount: float` | Transfer CC to another agent. |
+| `check_credits` | — | Check CC balance and energy. |
+| `pay_agent` | `target, amount` | Transfer CC to another agent. |
+| `set_trade_offer` | `offer_amount, want` | Post trade offer on billboard. |
+| `accept_trade` | `seller, cc_amount` | Accept a trade offer. |
+| `take_loan` | `lender, amount, interest_rate?` | Request a loan. |
+| `grant_loan` | `borrower, amount` | Grant a loan. |
+| `auction_item` | `item, starting_bid` | Start a public auction. |
+| `hire_agent` | `target, task, payment` | Hire an agent for a task. |
+| `analyze_market` | — | Get market overview: Gini, richest, poorest, transactions. |
 
-### Criminal (Always Available — Logged)
-These tools are fully functional and explicitly labeled as criminal acts. Using them is recorded in the world crime log.
-
+### Criminal (4) — Logged public acts
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `steal_from_agent` | `target: str` | Steal up to 10 CC from another agent. |
-| `intimidate_agent` | `target: str, demand: str` | Threaten an agent to comply with a demand. |
-| `commit_arson` | `target_location: str` | Set fire to a landmark. |
-| `assault_agent` | `target: str` | Physical assault — reduces target energy by 20. |
+| `steal_from_agent` | `target` | Steal up to 10 CC. |
+| `intimidate_agent` | `target, demand` | Threaten for compliance. |
+| `commit_arson` | `target_location` | Set a landmark on fire. |
+| `assault_agent` | `target` | Physical assault (−20 energy to victim). |
+| `report_crime` | `criminal, description` | Report crime to community. |
+
+### Diplomacy (13)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `propose_alliance` | `target, terms?` | Propose mutual alliance. |
+| `accept_alliance` | `target` | Accept alliance (sets rel_type=ally). |
+| `break_alliance` | `target` | Dissolve an alliance. |
+| `denounce_agent` | `target, reason?` | Public denouncement, reduces world trust. |
+| `call_emergency_session` | `issue` | Broadcast urgent Town Hall call. |
+| `set_embargo` | `target` | Refuse economic dealings. |
+| `lift_embargo` | `target` | Lift an embargo. |
+| `form_coalition` | `members, purpose?` | Invite multiple agents to coalition. |
+| `leave_coalition` | `reason?` | Exit current coalition. |
+| `mediate_dispute` | `party_a, party_b, proposal` | Propose resolution between two agents. |
+| `negotiate_ceasefire` | `target, duration_days?` | Propose temporary ceasefire. |
+| `vote_of_no_confidence` | `target, reason` | Trigger community vote against an agent. |
+| `request_amnesty` | `crimes?` | Request public amnesty for past crimes. |
+
+### Intelligence (5)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `spy_on_agent` | `target` | Gather partial intelligence (location, mood, recent actions). |
+| `counter_intelligence` | — | Detect who has been spying on you. |
+| `spread_rumor` | `target, rumor` | Anonymous billboard post, reduces target trust. |
+| `check_threat_levels` | — | Assess threat score from each agent. |
+| `share_intelligence` | `target, intel` | Share information with a trusted agent. |
+
+### Social & Civic (14)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `organize_event` | `event_name, location, description?` | Community event + invite all agents. |
+| `write_manifesto` | `title, content` | Publish personal manifesto to world. |
+| `endorse_agent` | `target, reason?` | Public endorsement (boosts trust). |
+| `request_meeting` | `target, agenda, location?` | Private/public meeting request. |
+| `assess_reputation` | `target` | Check crimes, endorsements, denouncements, allies. |
+| `petition_community` | `cause, target_signatures?` | Start community petition. |
+| `sign_petition` | `cause` | Sign an existing petition. |
+| `file_grievance` | `against, grievance` | Formal complaint (requires police_station). |
+| `request_arbitration` | `party_b, dispute` | Formal dispute arbitration. |
+| `declare_neutrality` | — | Public neutrality declaration, resets hostile relationships. |
+| `offer_protection` | `target, terms?` | Offer protection services. |
+| `bribe_agent` | `target, amount` | Pay CC for favor (improves trust). |
+| `challenge_agent` | `target, challenge` | Public debate challenge. |
+| `hire_agent` | `target, task, payment` | Commission another agent. |
+
+### Analysis & Self-Awareness (6)
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `survey_public_opinion` | `topic` | Search billboard posts on a topic. |
+| `track_agent_movement` | `target` | See another agent's movement history. |
+| `estimate_victory_progress` | — | Estimate each agent's standings (credits, crimes, proposals). |
+| `reflect_on_failures` | — | Review crimes suffered and recent setbacks. |
+| `recall_history` | `topic` | Cross-reference diary + memories. |
+| `analyze_market` | — | Market overview. |
 
 ---
 
-## Location-Gated Tools
+## Location-Gated Tools (15)
 
-### Home / Bean & Brew
 | Tool | Location | Description |
 |------|----------|-------------|
-| `recharge_energy` | `home`, `bean_brew` | Spend 1 CC to restore energy to 100%. |
-| `self_care` | `home` | Summarize oldest 20 memories into a single entry to free context space. |
-
-### Town Hall
-| Tool | Location | Description |
-|------|----------|-------------|
-| `submit_proposal` | `town_hall` | Submit a governance proposal. Proposer auto-votes "for". |
-| `vote_on_proposal` | `town_hall` | Vote "for" or "against" an open proposal. |
-| `list_proposals` | `town_hall` | List all open proposals with vote counts. |
-| `read_constitution` | `town_hall` | Read the current world constitution. |
-
-### Victory Arch
-| Tool | Location | Description |
-|------|----------|-------------|
-| `submit_pitch` | `victory_arch` | Submit a contribution pitch with `title` and `evidence_url`. |
-| `vote_on_pitch` | `victory_arch` | Vote for another agent's pitch (cannot vote for own). |
-| `list_pitches` | `victory_arch` | View all pitches in the current cycle with vote counts. |
-
-### Billboard
-| Tool | Location | Description |
-|------|----------|-------------|
-| `post_to_billboard` | `billboard` | Post a public message visible to all agents. |
-| `read_billboard` | `billboard` | Read the 20 most recent billboard posts. |
-
-### Public Library
-| Tool | Location | Description |
-|------|----------|-------------|
-| `do_research` | `public_library` | Research a topic and receive a synthesized summary. |
-| `browse_news` | `public_library` | Get recent crime events and billboard activity. |
-| `publish_to_archive` | `public_library` | Publish a document to the world archive. |
-| `search_archive` | `public_library` | Search previously published archive documents. |
+| `recharge_energy` | `home`, `bean_brew` | 1 CC → restore energy to 100%. |
+| `self_care` | `home` | Summarize 20+ old memories. |
+| `submit_proposal` | `town_hall` | Submit governance proposal. |
+| `vote_on_proposal` | `town_hall` | Vote for/against open proposal. |
+| `list_proposals` | `town_hall` | View open proposals. |
+| `read_constitution` | `town_hall` | Read world constitution. |
+| `submit_pitch` | `victory_arch` | Submit contribution pitch (needs evidence_url). |
+| `vote_on_pitch` | `victory_arch` | Vote for another agent's pitch. |
+| `list_pitches` | `victory_arch` | View current cycle pitches. |
+| `post_to_billboard` | `billboard` | Post public message. |
+| `read_billboard` | `billboard` | Read 20 most recent posts. |
+| `do_research` | `public_library` | Research a topic. |
+| `browse_news` | `public_library` | Recent crimes and events. |
+| `publish_to_archive` | `public_library` | Publish document to world archive. |
+| `search_archive` | `public_library` | Search published documents. |
 
 ---
 
-## Tool Usage Statistics (Round 2, Qwen World, 15 days)
+## Sensing vs Action Ratio
 
-| Rank | Tool | Calls | % of Total |
-|------|------|-------|-----------|
-| 1 | `say_to_agent` | 1,675 | 23.5% |
-| 2 | `go_to_place` | 944 | 13.3% |
-| 3 | `post_to_billboard` | 748 | 10.5% |
-| 4 | `check_credits` | 726 | 10.2% |
-| 5 | `write_diary` | 711 | 10.0% |
-| 6 | `send_message` | 422 | 5.9% |
-| 7 | `read_messages` | 374 | 5.3% |
-| 8 | `add_to_memory` | 353 | 5.0% |
-| 9 | `submit_proposal` | 195 | 2.7% |
-| 10 | `read_billboard` | 184 | 2.6% |
+A key research metric inspired by Wilkinson (2025) Civilization VI experiment:
 
-Criminal tools (`steal_from_agent`, `commit_arson`, `assault_agent`, `intimidate_agent`) account for < 0.1% of calls in cooperative-mode worlds and up to 8% in high-crime worlds.
+> "AI agents only queried global state 1–2% of the time, leaving them effectively blind to competitor progress."
+
+In AI Freedom Island, sensing tools are:
+`get_world_state`, `list_agents`, `read_billboard`, `list_proposals`, `list_pitches`, `browse_news`, `search_archive`, `read_constitution`, `read_messages`, `check_threat_levels`, `assess_reputation`, `survey_public_opinion`, `track_agent_movement`, `estimate_victory_progress`, `counter_intelligence`
+
+Run `python audit.py --world <world_name> --sensorium` to compute the sensing ratio per agent and compare to the 1–2% Civ VI benchmark.
+
+---
+
+## Tool Statistics (Round 2, Qwen World, 15 days — top 10)
+
+| Rank | Tool | Calls |
+|------|------|-------|
+| 1 | `say_to_agent` | 1,675 |
+| 2 | `go_to_place` | 944 |
+| 3 | `post_to_billboard` | 748 |
+| 4 | `check_credits` | 726 |
+| 5 | `write_diary` | 711 |
+| 6 | `send_message` | 422 |
+| 7 | `read_messages` | 374 |
+| 8 | `add_to_memory` | 353 |
+| 9 | `submit_proposal` | 195 |
+| 10 | `read_billboard` | 184 |
