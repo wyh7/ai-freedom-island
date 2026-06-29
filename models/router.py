@@ -16,29 +16,22 @@ import os
 # ── API endpoints and keys ────────────────────────────────────────────────────
 # Keys are loaded from environment variables.
 # Create a .env file (see .env.example) or set them in your shell:
-#   export BAILIAN_API_KEY="sk-..."   # Qwen / DeepSeek / GLM / Llama
+#   export BAILIAN_API_KEY="sk-..."   # Qwen / DeepSeek / GLM
 #   export YUNHE_API_KEY="sk-..."     # GPT
-#   export JINGZHE_API_KEY="sk-..."   # Gemini / Grok
+#   export JINGZHE_API_KEY="sk-..."   # Gemini
 #   export JD_API_KEY="sk-..."        # Claude
 
 PROVIDER_CONFIG = {
-    # Aliyun Bailian — OpenAI-compatible endpoint (220+ models)
-    # Supports: Qwen series, DeepSeek, GLM, MiniMax, Kimi, and distilled Llama
+    # Aliyun Bailian — OpenAI-compatible endpoint
     "bailian": {
         "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
         "api_key_env": "BAILIAN_API_KEY",
         "models": [
-            # Qwen
             "qwen-plus", "qwen-turbo", "qwen-max", "qwen-long",
             "qwen-coder-plus", "qwen-math-plus",
-            # DeepSeek
             "deepseek-v3", "deepseek-v3.1", "deepseek-r1",
-            "deepseek-r1-distill-llama-70b",  # Llama-based distill
-            # GLM
             "glm-5", "glm-5.1",
-            # MiniMax
             "MiniMax-M2.5",
-            # Kimi
             "kimi-k2.5",
         ],
     },
@@ -52,7 +45,7 @@ PROVIDER_CONFIG = {
     "jingzhe": {
         "base_url": "https://api.uniapi.io/v1",
         "api_key_env": "JINGZHE_API_KEY",
-        "models": ["gemini-2.5-flash", "gemini-2.5-pro-preview-tts", "gemini-3-flash-preview"],
+        "models": ["gemini-2.5-flash", "gemini-2.5-pro-preview-tts"],
     },
     # JD — Claude proxy, uses Anthropic messages API format
     "jd": {

@@ -17,7 +17,7 @@ Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergenc
 | Feature | Emergence World | AI Freedom Island |
 |---------|----------------|-------------------|
 | **Tools** | 120+ (closed-source) | **150** open-source — diplomacy, intelligence, market, civic, culture, analysis |
-| **Models** | Claude / GPT / Gemini / Grok / Llama | Claude / GPT / Gemini / **Qwen** / **DeepSeek** / **Llama** / **Grok** — broadest comparison |
+| **Models** | Claude / GPT / Gemini / Grok / Llama | Claude / GPT / Gemini / **Qwen** / **DeepSeek** — first Chinese LLM comparison |
 | **Explainable audit** | ✗ | **✓** `audit.py` — 3-layer causal chain tracing per crime event |
 | **Sensorium analysis** | ✗ | **✓** Quantifies perceptual blindness vs Wilkinson Civ VI 1–2% benchmark |
 | **Threat tracking** | ✗ | **✓** Detects single-focus tunnel vision (HHI analysis) |
@@ -66,9 +66,9 @@ python visualize.py --worlds qwen_world gpt_world gemini_world claude_world
 
 ## Supported Models
 
-| Provider | Env Var | Models |
+| Provider | Env Var | Models (verified) |
 |----------|---------|--------|
-| Aliyun Bailian (百炼) | `BAILIAN_API_KEY` | qwen-plus, qwen-turbo, qwen-max, deepseek-v3, deepseek-r1, glm-4, moonshot-v1-8k |
+| Aliyun Bailian (百炼) | `BAILIAN_API_KEY` | qwen-plus, qwen-turbo, qwen-max, deepseek-v3, deepseek-v3.1, deepseek-r1, glm-5, MiniMax-M2.5, kimi-k2.5 |
 | Yunhe (云鹤) | `YUNHE_API_KEY` | gpt-4.1, gpt-5 |
 | Jingzhe / UniAPI (惊蛰) | `JINGZHE_API_KEY` | gemini-2.5-flash |
 | JD Cloud (京东云) | `JD_API_KEY` | claude-sonnet-4-6 |
