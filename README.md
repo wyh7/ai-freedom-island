@@ -3,11 +3,6 @@
 A multi-agent social simulation framework for AI safety governance research.
 Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergence-World) (Emergence AI, 2026) with support for Chinese LLMs and explainable behavioral audit.
 
-> **Inspired by:** Emergence World placed Claude, GPT, Gemini, Grok, and Llama agents in a virtual town for 15 days.
-> Grok's world collapsed in 4 days (183 crimes). Gemini's world produced 683 crimes. Claude's world had 0 crimes but 98% vote approval (collective sycophancy). GPT's world voted endlessly and starved to death.
->
-> We replicate this experiment with Chinese LLMs (Qwen, DeepSeek) and add **explainable audit** — tracing *why* crime cascades happen.
-
 ## Key Results (Season 1, Round 1)
 
 | World | Alive | Crimes | Proposals | Gini | Verdict |
