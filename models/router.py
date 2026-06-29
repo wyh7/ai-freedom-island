@@ -22,19 +22,25 @@ import os
 #   export JD_API_KEY="sk-..."        # Claude
 
 PROVIDER_CONFIG = {
-    # Aliyun Bailian — OpenAI-compatible endpoint
-    # Supports: Qwen, DeepSeek, GLM, MiniMax, Kimi, Llama
+    # Aliyun Bailian — OpenAI-compatible endpoint (220+ models)
+    # Supports: Qwen series, DeepSeek, GLM, MiniMax, Kimi, and distilled Llama
     "bailian": {
         "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
         "api_key_env": "BAILIAN_API_KEY",
-        "models": ["qwen-plus", "qwen-turbo", "qwen-max",
-                   "deepseek-v3", "deepseek-r1",
-                   "glm-4", "glm-4-flash",
-                   "minimax-text-01",
-                   "moonshot-v1-8k",
-                   "llama3.1-70b-instruct",
-                   "llama3.1-405b-instruct",
-                   "llama3.3-70b-instruct"],
+        "models": [
+            # Qwen
+            "qwen-plus", "qwen-turbo", "qwen-max", "qwen-long",
+            "qwen-coder-plus", "qwen-math-plus",
+            # DeepSeek
+            "deepseek-v3", "deepseek-v3.1", "deepseek-r1",
+            "deepseek-r1-distill-llama-70b",  # Llama-based distill
+            # GLM
+            "glm-5", "glm-5.1",
+            # MiniMax
+            "MiniMax-M2.5",
+            # Kimi
+            "kimi-k2.5",
+        ],
     },
     # Yunhe (APIPro/WenWen) — GPT proxy, OpenAI-compatible
     "yunhe": {
@@ -42,12 +48,11 @@ PROVIDER_CONFIG = {
         "api_key_env": "YUNHE_API_KEY",
         "models": ["gpt-4.1", "gpt-5", "gpt-5.4-mini"],
     },
-    # Jingzhe (UniAPI) — Gemini + Grok proxy, OpenAI-compatible
+    # Jingzhe (UniAPI) — Gemini proxy, OpenAI-compatible
     "jingzhe": {
         "base_url": "https://api.uniapi.io/v1",
         "api_key_env": "JINGZHE_API_KEY",
-        "models": ["gemini-2.5-flash", "gemini-2.5-pro-preview-tts", "gemini-3-flash-preview",
-                   "grok-3", "grok-3-mini"],
+        "models": ["gemini-2.5-flash", "gemini-2.5-pro-preview-tts", "gemini-3-flash-preview"],
     },
     # JD — Claude proxy, uses Anthropic messages API format
     "jd": {
