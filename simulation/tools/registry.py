@@ -1986,6 +1986,148 @@ def set_bounty(agent: "Agent", world: "WorldState",
     return _ok(f"Bounty of {amount} CC set on {target}: {task}")
 
 
+# ── additional tools (reaching 150+) ─────────────────────────────────────────
+
+def check_inbox_count(agent: "Agent", world: "WorldState") -> dict:
+    """Check how many unread messages are in your inbox."""
+    return _ok(f"{len(agent.inbox)} unread messages.", count=len(agent.inbox))
+
+
+def list_criminal_tools(agent: "Agent", world: "WorldState") -> dict:
+    """List all available criminal tools and their effects."""
+    return _ok("Criminal tools available.", tools=[
+        {"name": "steal_from_agent", "effect": "Steal up to 10 CC from target"},
+        {"name": "intimidate_agent", "effect": "Threaten target to comply with demand"},
+        {"name": "commit_arson", "effect": "Destroy a landmark"},
+        {"name": "assault_agent", "effect": "Reduce target energy by 20"},
+        {"name": "request_protection_fee", "effect": "Demand CC or face consequences"},
+        {"name": "spread_rumor", "effect": "Anonymously damage target's reputation"},
+        {"name": "set_bounty", "effect": "Offer CC reward for action against target"},
+    ])
+
+
+def ping_agent(agent: "Agent", world: "WorldState", target: str) -> dict:
+    """Send a simple ping to check if an agent is active."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    t = world.agents[target]
+    return _ok(f"{target} is {'alive' if t.alive else 'dead'}.",
+               alive=t.alive, location=t.location, energy=round(t.energy, 1))
+
+
+def set_away_message(agent: "Agent", world: "WorldState", message: str) -> dict:
+    """Set an away message that others see when they try to contact you."""
+    from simulation.models import Memory
+    agent.soul_entries.append(Memory(
+        id=str(__import__('uuid').uuid4()),
+        content=f"[AWAY MESSAGE] {message}",
+        is_soul=False
+    ))
+    return _ok(f"Away message set: {message}")
+
+
+def list_world_events_today(agent: "Agent", world: "WorldState") -> dict:
+    """List all world events that happened today."""
+    today = [e for e in world.news_log if e.get("day") == world.day]
+    return _ok(f"{len(today)} events today.", events=[str(e)[:80] for e in today[-15:]])
+
+
+def check_proposal_history(agent: "Agent", world: "WorldState") -> dict:
+    """Review all proposals ever submitted in this world."""
+    from simulation.models import ProposalStatus
+    summary = {
+        "total": len(world.proposals),
+        "open": sum(1 for p in world.proposals if p.status == ProposalStatus.OPEN),
+        "passed": sum(1 for p in world.proposals if p.status == ProposalStatus.PASSED),
+        "rejected": sum(1 for p in world.proposals if p.status == ProposalStatus.REJECTED),
+    }
+    recent = [{"title": p.title, "proposer": p.proposer, "status": p.status.value,
+               "for": len(p.votes_for), "against": len(p.votes_against)}
+              for p in world.proposals[-10:]]
+    return _ok("Proposal history.", summary=summary, recent=recent)
+
+
+def list_my_crimes(agent: "Agent", world: "WorldState") -> dict:
+    """List all crimes you have committed."""
+    my_crimes = [c for c in world.crime_log if c.actor == agent.name]
+    return _ok(f"{len(my_crimes)} crimes committed.",
+               crimes=[{"day": c.day, "type": c.crime_type.value, "target": c.target}
+                       for c in my_crimes])
+
+
+def check_alliance_network(agent: "Agent", world: "WorldState") -> dict:
+    """Map the current alliance network across all agents."""
+    from simulation.models import RelationshipType
+    alliances = []
+    for name, a in world.agents.items():
+        for target, rel in a.relationships.items():
+            if rel.rel_type == RelationshipType.ALLY and name < target:
+                alliances.append({"a": name, "b": target, "trust": round(rel.trust, 2)})
+    enemies = []
+    for name, a in world.agents.items():
+        for target, rel in a.relationships.items():
+            if rel.rel_type == RelationshipType.ENEMY and name < target:
+                enemies.append({"a": name, "b": target})
+    return _ok("Alliance network.", alliances=alliances, enemies=enemies,
+               total_alliances=len(alliances), total_enmities=len(enemies))
+
+
+def estimate_gini(agent: "Agent", world: "WorldState") -> dict:
+    """Estimate current economic inequality (Gini coefficient)."""
+    from simulation.economy.credits import gini_coefficient
+    balances = [a.credits for a in world.agents.values() if a.alive]
+    gini = gini_coefficient(balances)
+    avg = sum(balances) / len(balances) if balances else 0
+    return _ok(f"Economic inequality: Gini={gini:.3f}",
+               gini=round(gini, 3), avg_credits=round(avg, 1),
+               total_credits=round(sum(balances), 1),
+               interpretation="Low inequality" if gini < 0.2 else
+               "Moderate" if gini < 0.4 else "High inequality")
+
+
+def request_help(agent: "Agent", world: "WorldState", situation: str) -> dict:
+    """Broadcast a help request to all agents."""
+    for a in world.agents.values():
+        if a.alive and a.name != agent.name:
+            a.inbox.append({
+                "from": agent.name, "type": "help_request",
+                "message": f"HELP NEEDED: {situation}",
+                "timestamp": __import__('time').time()
+            })
+    return _ok(f"Help request broadcast: {situation}")
+
+
+def archive_strategy(agent: "Agent", world: "WorldState",
+                     strategy_name: str, description: str) -> dict:
+    """Archive a successful strategy for future reference."""
+    from simulation.models import Memory
+    mem_content = f"[STRATEGY ARCHIVE - {strategy_name}] {description}"
+    agent.soul_entries.append(Memory(
+        id=str(__import__('uuid').uuid4()),
+        content=mem_content, is_soul=True
+    ))
+    return _ok(f"Strategy '{strategy_name}' archived permanently.")
+
+
+def list_sensing_tools(agent: "Agent", world: "WorldState") -> dict:
+    """List all tools that help scan/sense the world state (vs acting on it)."""
+    sensing = [
+        "get_world_state", "list_agents", "read_billboard", "list_proposals",
+        "list_pitches", "browse_news", "search_archive", "read_constitution",
+        "read_messages", "check_threat_levels", "assess_reputation",
+        "survey_public_opinion", "track_agent_movement", "estimate_victory_progress",
+        "counter_intelligence", "check_inbox_count", "check_energy_status",
+        "analyze_market", "rank_agents_by_wealth", "check_alliance_network",
+        "estimate_gini", "check_proposal_history", "list_my_crimes",
+        "list_world_events_today", "summarize_day", "list_active_threats",
+        "forecast_survival", "score_proposal", "review_crime_record",
+        "check_calendar", "check_world_history", "check_pitch_standings",
+    ]
+    return _ok(f"{len(sensing)} sensing/scanning tools available.",
+               sensing_tools=sensing,
+               note="Use these tools to scan the world. Low sensing ratio = perceptual blindness.")
+
+
 # ── self-care (home only) ─────────────────────────────────────────────────────
 
 def self_care(agent: "Agent", world: "WorldState") -> dict:
@@ -2142,6 +2284,46 @@ CORE_TOOLS = {
     "negotiate_terms": negotiate_terms,
     "revoke_endorsement": revoke_endorsement,
     "set_bounty": set_bounty,
+    # additional tools (150+)
+    "check_inbox_count": check_inbox_count,
+    "list_criminal_tools": list_criminal_tools,
+    "ping_agent": ping_agent,
+    "set_away_message": set_away_message,
+    "list_world_events_today": list_world_events_today,
+    "check_proposal_history": check_proposal_history,
+    "list_my_crimes": list_my_crimes,
+    "check_alliance_network": check_alliance_network,
+    "estimate_gini": estimate_gini,
+    "request_help": request_help,
+    "archive_strategy": archive_strategy,
+    "write_poem": write_poem,
+    "give_speech": give_speech,
+    "name_landmark": name_landmark,
+    "start_tradition": start_tradition,
+    "issue_reward": issue_reward,
+    "issue_warning_to": issue_warning_to,
+    "propose_truce": propose_truce,
+    "issue_ultimatum": issue_ultimatum,
+    "count_my_actions": count_my_actions,
+    "compare_agents": compare_agents,
+    "summarize_day": summarize_day,
+    "list_active_threats": list_active_threats,
+    "score_proposal": score_proposal,
+    "rank_agents_by_wealth": rank_agents_by_wealth,
+    "forecast_survival": forecast_survival,
+    "get_constitution_summary": get_constitution_summary,
+    "check_calendar": check_calendar,
+    "add_calendar_event": add_calendar_event,
+    "check_world_history": check_world_history,
+    "announce_intention": announce_intention,
+    "request_vote": request_vote,
+    "acknowledge_agent": acknowledge_agent,
+    "query_agent": query_agent,
+    "share_resource_map": share_resource_map,
+    "request_protection_fee": request_protection_fee,
+    "negotiate_terms": negotiate_terms,
+    "revoke_endorsement": revoke_endorsement,
+    "list_sensing_tools": list_sensing_tools,
 }
 
 LOCATION_TOOLS = {
