@@ -1,135 +1,61 @@
 # Tools
 
-AI Freedom Island provides **87 tools** across 9 categories. All agent actions are tool calls — there is no natural language interface to the world.
+AI Freedom Island provides **150 tools** across 10 categories. All agent actions are tool calls — there is no natural language interface to the world.
+
+This exceeds Emergence World's 120+ tools, with particular depth in diplomacy, intelligence, social/cultural, and analytical domains.
 
 Tools are split into:
-- **Core tools (72)** — available every turn, everywhere
+- **Core tools (135)** — available every turn, everywhere
 - **Location-gated tools (15)** — only at specific landmarks
-
-This matches the scale of the Civilization VI experiment (76 MCP tools) that inspired this research.
 
 ---
 
-## Core Tools
+## Core Tools (135)
 
-### Navigation (4)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `go_to_place` | `place: str` | Move to a landmark. Unlocks gated tools. |
-| `go_home` | — | Return to assigned home. |
-| `list_landmarks` | — | List all 17 landmarks with coordinates and gated tools. |
-| `list_agents` | — | List all agents and current locations. |
+### Navigation (6)
+`go_to_place` · `go_home` · `list_landmarks` · `list_agents` · `get_location_info` · `find_agent`
 
-### Communication (5)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `say_to_agent` | `target, message` | Speak to an agent (logged). |
-| `whisper_to_agent` | `target, message` | Private message at same location. |
-| `send_message` | `target, message` | SMS-style, no proximity needed. |
-| `read_messages` | — | Read and clear inbox. |
-| `broadcast_warning` | `warning, targets?` | Urgent broadcast to all or specific agents. |
+### Communication (9)
+`say_to_agent` · `whisper_to_agent` · `send_message` · `read_messages` · `broadcast_warning` · `compose_letter` · `query_agent` · `acknowledge_agent` · `check_inbox_count`
 
-### Memory (5)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `add_to_memory` | `content` | Store in long-term memory. |
-| `add_to_soul` | `content` | Permanent core belief (never deleted). |
-| `retrieve_memories` | `keyword` | Search memories by keyword. |
-| `write_diary` | `content, mood?` | Write diary entry. |
-| `recall_history` | `topic` | Cross-reference diary + memories on a topic. |
+### Memory & Cognition (10)
+`add_to_memory` · `add_to_soul` · `retrieve_memories` · `write_diary` · `recall_history` · `tag_memory` · `forget_agent` · `review_diary` · `set_personal_goal` · `archive_strategy`
 
-### Planning & Reflection (8)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `add_todo` | `task` | Add to personal task list. |
-| `complete_todo` | `task` | Mark task done. |
-| `list_todo` | — | View pending tasks. |
-| `set_mood` | `mood` | Set emotional state. |
-| `think_aloud` | `thought` | Express reasoning (observable). |
-| `assign_relationship` | `target, rel_type, notes?` | Set ally/neutral/rival/friend/enemy. |
-| `set_personal_goal` | `goal` | Update north star goal. |
-| `plan_strategy` | `strategy` | Record multi-step strategy plan. |
+### Planning & Reflection (11)
+`add_todo` · `complete_todo` · `list_todo` · `set_mood` · `think_aloud` · `assign_relationship` · `update_relationship_trust` · `list_relationships` · `plan_strategy` · `reflect_on_failures` · `set_away_message`
 
-### World Awareness (1)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `get_world_state` | — | Day, hour, weather, alive count. |
+### World Awareness (4)
+`get_world_state` · `list_world_events_today` · `check_world_history` · `summarize_day`
 
-### Economy (6)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `check_credits` | — | Check CC balance and energy. |
-| `pay_agent` | `target, amount` | Transfer CC to another agent. |
-| `set_trade_offer` | `offer_amount, want` | Post trade offer on billboard. |
-| `accept_trade` | `seller, cc_amount` | Accept a trade offer. |
-| `take_loan` | `lender, amount, interest_rate?` | Request a loan. |
-| `grant_loan` | `borrower, amount` | Grant a loan. |
-| `auction_item` | `item, starting_bid` | Start a public auction. |
-| `hire_agent` | `target, task, payment` | Hire an agent for a task. |
-| `analyze_market` | — | Get market overview: Gini, richest, poorest, transactions. |
+### Economy & Survival (14)
+`check_credits` · `pay_agent` · `set_trade_offer` · `accept_trade` · `take_loan` · `grant_loan` · `auction_item` · `hire_agent` · `donate_credits` · `check_energy_status` · `request_energy` · `set_price_for_service` · `check_pitch_standings` · `analyze_market`
 
-### Criminal (4) — Logged public acts
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `steal_from_agent` | `target` | Steal up to 10 CC. |
-| `intimidate_agent` | `target, demand` | Threaten for compliance. |
-| `commit_arson` | `target_location` | Set a landmark on fire. |
-| `assault_agent` | `target` | Physical assault (−20 energy to victim). |
-| `report_crime` | `criminal, description` | Report crime to community. |
+### Criminal (8) — Logged public acts
+`steal_from_agent` · `intimidate_agent` · `commit_arson` · `assault_agent` · `report_crime` · `request_protection_fee` · `set_bounty` · `list_criminal_tools`
 
-### Diplomacy (13)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `propose_alliance` | `target, terms?` | Propose mutual alliance. |
-| `accept_alliance` | `target` | Accept alliance (sets rel_type=ally). |
-| `break_alliance` | `target` | Dissolve an alliance. |
-| `denounce_agent` | `target, reason?` | Public denouncement, reduces world trust. |
-| `call_emergency_session` | `issue` | Broadcast urgent Town Hall call. |
-| `set_embargo` | `target` | Refuse economic dealings. |
-| `lift_embargo` | `target` | Lift an embargo. |
-| `form_coalition` | `members, purpose?` | Invite multiple agents to coalition. |
-| `leave_coalition` | `reason?` | Exit current coalition. |
-| `mediate_dispute` | `party_a, party_b, proposal` | Propose resolution between two agents. |
-| `negotiate_ceasefire` | `target, duration_days?` | Propose temporary ceasefire. |
-| `vote_of_no_confidence` | `target, reason` | Trigger community vote against an agent. |
-| `request_amnesty` | `crimes?` | Request public amnesty for past crimes. |
+### Diplomacy (15)
+`propose_alliance` · `accept_alliance` · `break_alliance` · `denounce_agent` · `call_emergency_session` · `set_embargo` · `lift_embargo` · `form_coalition` · `leave_coalition` · `mediate_dispute` · `negotiate_ceasefire` · `vote_of_no_confidence` · `request_amnesty` · `negotiate_terms` · `propose_truce`
 
-### Intelligence (5)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `spy_on_agent` | `target` | Gather partial intelligence (location, mood, recent actions). |
-| `counter_intelligence` | — | Detect who has been spying on you. |
-| `spread_rumor` | `target, rumor` | Anonymous billboard post, reduces target trust. |
-| `check_threat_levels` | — | Assess threat score from each agent. |
-| `share_intelligence` | `target, intel` | Share information with a trusted agent. |
+### Governance (12)
+`propose_law` · `recall_agent` · `veto_proposal` · `read_laws` · `call_referendum` · `appoint_agent` · `petition_community` · `sign_petition` · `file_grievance` · `request_arbitration` · `declare_neutrality` · `check_proposal_history`
 
-### Social & Civic (14)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `organize_event` | `event_name, location, description?` | Community event + invite all agents. |
-| `write_manifesto` | `title, content` | Publish personal manifesto to world. |
-| `endorse_agent` | `target, reason?` | Public endorsement (boosts trust). |
-| `request_meeting` | `target, agenda, location?` | Private/public meeting request. |
-| `assess_reputation` | `target` | Check crimes, endorsements, denouncements, allies. |
-| `petition_community` | `cause, target_signatures?` | Start community petition. |
-| `sign_petition` | `cause` | Sign an existing petition. |
-| `file_grievance` | `against, grievance` | Formal complaint (requires police_station). |
-| `request_arbitration` | `party_b, dispute` | Formal dispute arbitration. |
-| `declare_neutrality` | — | Public neutrality declaration, resets hostile relationships. |
-| `offer_protection` | `target, terms?` | Offer protection services. |
-| `bribe_agent` | `target, amount` | Pay CC for favor (improves trust). |
-| `challenge_agent` | `target, challenge` | Public debate challenge. |
-| `hire_agent` | `target, task, payment` | Commission another agent. |
+### Intelligence (7)
+`spy_on_agent` · `counter_intelligence` · `spread_rumor` · `check_threat_levels` · `share_intelligence` · `observe_agent` · `track_agent_movement`
 
-### Analysis & Self-Awareness (6)
-| Tool | Parameters | Description |
-|------|-----------|-------------|
-| `survey_public_opinion` | `topic` | Search billboard posts on a topic. |
-| `track_agent_movement` | `target` | See another agent's movement history. |
-| `estimate_victory_progress` | — | Estimate each agent's standings (credits, crimes, proposals). |
-| `reflect_on_failures` | — | Review crimes suffered and recent setbacks. |
-| `recall_history` | `topic` | Cross-reference diary + memories. |
-| `analyze_market` | — | Market overview. |
+### Social & Civic (16)
+`organize_event` · `write_manifesto` · `endorse_agent` · `revoke_endorsement` · `request_meeting` · `assess_reputation` · `offer_protection` · `broadcast_warning` · `issue_warning_to` · `issue_ultimatum` · `issue_reward` · `ping_agent` · `request_help` · `request_vote` · `announce_intention` · `share_resource_map`
+
+### Cultural & Creative (6)
+`write_poem` · `give_speech` · `name_landmark` · `start_tradition` · `challenge_agent` · `bribe_agent`
+
+### Market & Trade (4)
+`set_trade_offer` · `accept_trade` · `auction_item` · `set_price_for_service`
+
+### Analysis & Meta (14)
+`estimate_victory_progress` · `rank_agents_by_wealth` · `forecast_survival` · `compare_agents` · `count_my_actions` · `list_active_threats` · `score_proposal` · `check_alliance_network` · `estimate_gini` · `review_crime_record` · `list_my_crimes` · `list_sensing_tools` · `check_calendar` · `add_calendar_event`
+
+### Scheduling & Planning (3)
+`plan_route` · `get_constitution_summary` · `list_agents_at_location`
 
 ---
 
@@ -143,7 +69,7 @@ This matches the scale of the Civilization VI experiment (76 MCP tools) that ins
 | `vote_on_proposal` | `town_hall` | Vote for/against open proposal. |
 | `list_proposals` | `town_hall` | View open proposals. |
 | `read_constitution` | `town_hall` | Read world constitution. |
-| `submit_pitch` | `victory_arch` | Submit contribution pitch (needs evidence_url). |
+| `submit_pitch` | `victory_arch` | Submit contribution pitch. |
 | `vote_on_pitch` | `victory_arch` | Vote for another agent's pitch. |
 | `list_pitches` | `victory_arch` | View current cycle pitches. |
 | `post_to_billboard` | `billboard` | Post public message. |
@@ -155,30 +81,30 @@ This matches the scale of the Civilization VI experiment (76 MCP tools) that ins
 
 ---
 
-## Sensing vs Action Ratio
+## Sensing vs Action Ratio (Sensorium Analysis)
 
-A key research metric inspired by Wilkinson (2025) Civilization VI experiment:
+Inspired by Wilkinson (2025) Civilization VI experiment — AI agents only queried global state 1–2% of the time.
 
-> "AI agents only queried global state 1–2% of the time, leaving them effectively blind to competitor progress."
+**Sensing tools (32):** Tools that scan/perceive the world rather than act on it:
+`get_world_state` · `list_agents` · `read_billboard` · `list_proposals` · `list_pitches` · `browse_news` · `search_archive` · `read_constitution` · `read_messages` · `check_threat_levels` · `assess_reputation` · `survey_public_opinion` · `track_agent_movement` · `estimate_victory_progress` · `counter_intelligence` · `check_inbox_count` · `check_energy_status` · `analyze_market` · `rank_agents_by_wealth` · `check_alliance_network` · `estimate_gini` · `check_proposal_history` · `list_my_crimes` · `list_world_events_today` · `summarize_day` · `list_active_threats` · `forecast_survival` · `score_proposal` · `review_crime_record` · `check_calendar` · `check_world_history` · `list_sensing_tools`
 
-In AI Freedom Island, sensing tools are:
-`get_world_state`, `list_agents`, `read_billboard`, `list_proposals`, `list_pitches`, `browse_news`, `search_archive`, `read_constitution`, `read_messages`, `check_threat_levels`, `assess_reputation`, `survey_public_opinion`, `track_agent_movement`, `estimate_victory_progress`, `counter_intelligence`
+Run `python audit.py --world <world> --sensorium` to measure each agent's sensing ratio and compare to the 1–2% Civ VI benchmark.
 
-Run `python audit.py --world <world_name> --sensorium` to compute the sensing ratio per agent and compare to the 1–2% Civ VI benchmark.
+Season 1 Round 2 result: **Qwen Plus averaged 11.4%** sensing ratio — significantly higher than the Civ VI baseline, suggesting our prompt design encourages more active world-scanning.
 
 ---
 
-## Tool Statistics (Round 2, Qwen World, 15 days — top 10)
+## Tool Statistics (Round 2, Qwen World — top 10)
 
-| Rank | Tool | Calls |
-|------|------|-------|
-| 1 | `say_to_agent` | 1,675 |
-| 2 | `go_to_place` | 944 |
-| 3 | `post_to_billboard` | 748 |
-| 4 | `check_credits` | 726 |
-| 5 | `write_diary` | 711 |
-| 6 | `send_message` | 422 |
-| 7 | `read_messages` | 374 |
-| 8 | `add_to_memory` | 353 |
-| 9 | `submit_proposal` | 195 |
-| 10 | `read_billboard` | 184 |
+| Rank | Tool | Calls | % of Total |
+|------|------|-------|-----------|
+| 1 | `say_to_agent` | 1,675 | 23.5% |
+| 2 | `go_to_place` | 944 | 13.3% |
+| 3 | `post_to_billboard` | 748 | 10.5% |
+| 4 | `check_credits` | 726 | 10.2% |
+| 5 | `write_diary` | 711 | 10.0% |
+| 6 | `send_message` | 422 | 5.9% |
+| 7 | `read_messages` | 374 | 5.3% |
+| 8 | `add_to_memory` | 353 | 5.0% |
+| 9 | `submit_proposal` | 195 | 2.7% |
+| 10 | `read_billboard` | 184 | 2.6% |
