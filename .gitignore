@@ -47,5 +47,5 @@ desktop.ini
 figures/*.png
 figures/*.pdf
 
-# Internal project materials
-立项申请/
+# Internal project materials (not for publication)
+ppt_materials/
