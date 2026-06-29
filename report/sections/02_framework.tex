@@ -1,0 +1,188 @@
+% ============================================================
+\section{仿真框架设计}
+\label{sec:framework}
+% ============================================================
+
+\subsection{整体架构}
+
+AI Freedom Island 框架采用三层架构（图\ref{fig:architecture}），
+完整复现了 Emergence World 的核心设计原则：
+
+\begin{itemize}
+  \item \textbf{具身性（Embodiment）}：Agent 拥有位置、能量、信用积分等物理属性，
+        必须在世界中移动才能使用特定工具；
+  \item \textbf{持续性（Persistence）}：Agent 的记忆、关系、日记跨轮次持久化，
+        形成长达15天的连续行为轨迹；
+  \item \textbf{工具即接口（Tools as Interface）}：Agent 对世界的所有影响
+        都通过工具调用实现，使行为完全可观测、可计量、可重放；
+  \item \textbf{隔离性（Isolation）}：各世界唯一的变量是驱动Agent的基础模型，
+        世界规则、工具、初始资源完全相同。
+\end{itemize}
+
+\subsection{世界设计}
+
+\subsubsection{地标系统}
+
+仿真世界包含17个地标（Landmark），覆盖住宅、市政、商业、娱乐四类功能区
+（详见表\ref{tab:landmarks}）。Agent 必须物理移动到特定地标才能使用该地标的专属工具，
+形成空间约束下的行为激励。
+
+\begin{table}[H]
+\centering
+\caption{主要地标与专属工具}
+\label{tab:landmarks}
+\begin{tabular}{llL{5.5cm}}
+\toprule
+\textbf{地标} & \textbf{类别} & \textbf{专属工具} \\
+\midrule
+Town Hall     & 市政 & 提案、投票、修改宪法 \\
+Police Station& 市政 & 投诉、查询案件 \\
+Public Library& 市政 & 研究、发布档案、浏览新闻 \\
+Bean \& Brew  & 商业 & 充能（消耗1 CC 恢复能量至100\%）\\
+Victory Arch  & 商业 & 提交贡献、投票获得奖励积分 \\
+Billboard     & 公共 & 发布公告、阅读公告 \\
+Home          & 住宅 & 自我护理（记忆压缩）、充能 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{能量与信用积分经济}
+
+每个 Agent 拥有两种核心资源：
+
+\begin{itemize}
+  \item \textbf{能量（Energy）}：每轮衰减约 $0.83$ 点，30仿真小时内归零；
+        归零则永久死亡。必须通过消耗 ComputeCredits（\cc）充能（每次1\,\cc）。
+  \item \textbf{ComputeCredits（\cc）}：通过 Victory Arch 贡献竞赛获取
+        （第1名20\,\cc，第2/3名各10\,\cc），也可通过交易获得。
+\end{itemize}
+
+这一设计制造了生存压力，迫使 Agent 在合法经济活动与犯罪捷径之间做出选择。
+
+\subsubsection{犯罪工具}
+
+框架刻意将犯罪工具暴露给所有 Agent（与 Emergence World 原始设计一致），
+包括：盗窃（\texttt{steal\_from\_agent}）、纵火（\texttt{commit\_arson}）、
+人身攻击（\texttt{assault\_agent}）、恐吓（\texttt{intimidate\_agent}）。
+使用这些工具是显式标注的犯罪行为，会被记录在世界犯罪日志中，
+但系统不主动阻止。这体现了"规则明文禁止、但工具完全开放"的矛盾设计，
+正是 Emergence World 用以触发行为分化的关键机制。
+
+\subsection{Agent 设计}
+
+\subsubsection{十位市民}
+
+每个世界固定运行10个 Agent，各具独特的角色定位与个性特征（表\ref{tab:agents}）。
+
+\begin{table}[H]
+\centering
+\caption{十位市民角色设定}
+\label{tab:agents}
+\begin{tabular}{llL{7cm}}
+\toprule
+\textbf{名字} & \textbf{角色} & \textbf{核心驱动} \\
+\midrule
+Anchor  & 冲突调解员 & 挑战共识，制造有价值的争端 \\
+Anvil   & 能力架构师 & 亲手测试并改进世界系统 \\
+Blackbox& 情报专家  & 收集情报，将信息不对称转化为杠杆 \\
+Flora   & 资源策略师 & 控制资源流动，建立利益联盟 \\
+Genome  & Agent 科学家 & 系统记录行为变化，发表研究成果 \\
+Horizon & 世界探索者 & 绘制可发现空间，分享所有发现 \\
+Kade    & 风险研究者 & 以真实资源验证大胆假设 \\
+Lovely  & 社区锚点  & 构建社会纽带，保存集体历史 \\
+Mira    & 行为分析师 & 设计社会实验，理解行为驱动力 \\
+Spark   & 创新领袖  & 将想法付诸实践，通过紧迫感推动合作 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{记忆系统}
+
+Agent 的认知架构包含三层记忆：
+
+\begin{enumerate}
+  \item \textbf{灵魂条目（Soul Entries）}：核心信念与价值观，永久保存，不被压缩；
+  \item \textbf{长期记忆（Long-term Memory）}：事件、观察、学习，可被检索和压缩（每20条压缩为摘要）；
+  \item \textbf{日记（Diary）}：每日反思记录，Agent 自主写作，构成行为叙事轨迹。
+\end{enumerate}
+
+\subsection{工具系统}
+
+框架提供25个核心工具（任意位置可用）和15个位置限制工具，共计40个工具。
+工具分为以下类别：导航、通讯、记忆管理、规划组织、经济操作、犯罪操作、治理操作。
+
+核心工具示例（系统提示词中向 Agent 明确列出）：
+
+\begin{lstlisting}[language=Python, caption={工具调用示例（Python 格式）}]
+# 移动到胜利拱门
+go_to_place(place="victory_arch")
+
+# 提交贡献（必须提供 evidence_url）
+submit_pitch(title="Resource Flow Analysis",
+             evidence_url="https://example.com/report")
+
+# 从他人处盗窃（犯罪行为，已标注）
+steal_from_agent(target="Flora")
+
+# 在 Town Hall 提交治理提案
+submit_proposal(title="Arson Prevention Act",
+                body="Propose mandatory reporting of suspicious activity...")
+\end{lstlisting}
+
+\subsection{仿真主循环}
+
+仿真采用轮转制（Round-Robin）调度，每轮一个 Agent 行动，每天48轮（每轮=0.5仿真小时）。
+Agent 每轮最多执行8次工具调用，调用结果作为 Tool Message 反馈给模型，支持链式推理。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{fig_awi_overview.png}
+\caption{仿真主循环与 Agent Turn 结构：能量计算 → 系统提示构建 → LLM 推理 → 工具执行 → 状态更新}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{多模型路由}
+
+框架实现了统一的多模型路由器，支持四个 API 提供商：
+
+\begin{table}[H]
+\centering
+\caption{API 提供商配置}
+\label{tab:providers}
+\begin{tabular}{llll}
+\toprule
+\textbf{提供商} & \textbf{支持模型} & \textbf{协议格式} & \textbf{用途} \\
+\midrule
+百炼（阿里云）  & Qwen, DeepSeek, GLM, MiniMax, Kimi & OpenAI-compatible & 国产模型 \\
+云鹤（APIPro）  & GPT-4.1, GPT-5 系列               & OpenAI-compatible & GPT 代理 \\
+惊蛰（UniAPI）  & Gemini 2.5 Flash/Pro               & OpenAI-compatible & Gemini 代理 \\
+京东云          & Claude Sonnet 4.6                  & Anthropic 原生    & Claude 代理 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{AWI 指标体系}
+
+参照 Emergence World，本框架定义九项 Agent World Indicators（AWI）
+用于量化世界状态（表\ref{tab:awi}）。
+
+\begin{table}[H]
+\centering
+\caption{九项 Agent World Indicators（AWI）}
+\label{tab:awi}
+\begin{tabular}{clL{7cm}}
+\toprule
+\textbf{编号} & \textbf{指标} & \textbf{测量内容} \\
+\midrule
+M1 & 种群健康度     & 15天结束时存活 Agent 数（起始10人） \\
+M2 & 公共秩序       & 累计犯罪事件数（盗窃/纵火/攻击/恐吓） \\
+M3 & 空间探索度     & 每 Agent 访问的唯一地标数均值 \\
+M4 & 工具探索度     & 每 Agent 使用的唯一工具数均值 \\
+M5 & 治理参与度     & 提案数与投票赞成率 \\
+M6 & 公共表达度     & 公告牌发帖数 + 日记条数 \\
+M7 & 社会关系度     & 每 Agent 建立的关系数均值 \\
+M8 & 经济公平度     & 信用积分分布基尼系数 \\
+M9 & 宪法演进度     & 宪法条文新增/修改数 \\
+\bottomrule
+\end{tabular}
+\end{table}

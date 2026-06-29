@@ -1,0 +1,55 @@
+# Environment & secrets
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Logs (large, auto-generated)
+logs/
+*.log
+
+# Results (large data, can re-generate)
+results/
+
+# Test/scratch worlds
+results/timing_test/
+results/prompt_test/
+results/final_test/
+results/quicktest/
+results/gemini_test*/
+
+# LaTeX build artifacts
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.bbl
+report/*.blg
+report/*.synctex.gz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large binary files
+*.pptx
+*.xlsx
+*.pdf
+figures/*.png
+figures/*.pdf

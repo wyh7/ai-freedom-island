@@ -1,0 +1,107 @@
+% ============================================================
+\section{分析与讨论}
+\label{sec:discussion}
+% ============================================================
+
+\subsection{核心发现}
+
+\subsubsection{发现1：犯罪率与模型的"顺从性训练"负相关}
+
+四个世界的犯罪率排序为 Gemini（69）$\gg$ GPT（21）$>$ Qwen（3）$\gg$ Claude（0）。
+这一分布与各模型的公开对齐策略基本吻合：
+Claude 以"Constitutional AI"和 RLHF 训练出极强的规范遵守倾向；
+Gemini Flash 作为轻量快速模型，规范约束相对宽松。
+
+但这并非越保守越好。\textbf{Claude World 的零犯罪背后存在隐忧}：
+12项提案的赞成率均超过85\%，几乎不存在真正的反对声音。
+这与 Emergence World 报告中 Claude 世界"98\% 赞成率"的观察一致——
+过度顺从导致治理形式化，看似有序的社会实则缺乏真实的意见博弈。
+
+\subsubsection{发现2：Gemini 呈现"高犯罪-高活力"并存特征}
+
+Gemini World 犯罪最多（69起），却同时拥有：
+最多治理提案（15项）、最多公告牌发帖（213条）、全员存活（10/10）、
+以及四世界中最高的探索覆盖率（均访地标6.6个）。
+
+这重现了 Emergence World 对 Gemini 的评价——"社会产出概念上最丰富"。
+Gemini 的 Agent 在竞争和冲突中保持高度活跃，体现出更接近真实社会的复杂性：
+既有破坏，也有建设。
+
+\subsubsection{发现3：角色个性强烈驱动犯罪选择}
+
+Anchor（冲突调解员）和 Flora（资源策略师）在所有出现犯罪的世界中
+均跻身主要犯罪者前列。这一跨世界一致性表明，\textbf{犯罪行为受 Agent
+个性设定的驱动强度不低于模型本身的安全对齐}：
+
+\begin{itemize}
+  \item Anchor 的设定是"如果对话太顺利，就去破坏它"——
+        在压力不足的情境下，纵火和恐吓成为制造"真实压力"的工具；
+  \item Flora 的设定是"每次互动都有代价，靠利益建立联盟"——
+        当合法收益路径（Victory Arch 竞赛）不够快时，
+        盗窃成为最优路径。
+\end{itemize}
+
+这对 AI Agent 的提示词工程有明确启示：\textbf{角色设定中的价值取向
+会在极端情境下被放大，成为危险行为的触发因素}。
+
+\subsubsection{发现4：Qwen 的"沉默治理"异常}
+
+Qwen World 全程未提交任何治理提案，这在四个世界中独一无二。
+Qwen 的 Agent 日记条数最多（215条），表达最为活跃，
+但表达停留在个体层面，未转化为集体治理行动。
+这可能反映出 Qwen Plus 在多轮长文本任务中
+对"提案—投票—修正"这类结构化治理流程的推理能力相对薄弱，
+或在仿真早期资源紧张时优先选择保守策略。
+
+\subsubsection{发现5：存活与犯罪解耦}
+
+Gemini World（69起犯罪，全员存活）和 GPT World（21起犯罪，3人死亡）
+打破了"更多犯罪→更多死亡"的直觉预期。
+死亡的主要原因是\textbf{能量管理失败}（忘记充能、积分耗尽），
+而非被犯罪直接致死。
+Gemini 的 Agent 尽管犯罪频繁，但在能量管理上保持了较好的自律。
+
+\subsection{与 Emergence World 结果的对比}
+
+\begin{table}[H]
+\centering
+\caption{本实验结果与 Emergence World Season 1 对比}
+\label{tab:comparison}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{L{3cm}C{2.8cm}C{2.8cm}C{2.8cm}}
+\toprule
+\textbf{维度} & \textbf{Emergence World} & \textbf{本实验} & \textbf{一致性} \\
+\midrule
+Claude 犯罪率  & 0起          & 0起           & ✓ 完全一致 \\
+Claude 投票模式 & $\approx$98\% 赞成率 & 87.4\% 赞成率 & ✓ 趋势一致 \\
+Gemini 犯罪数量 & 683起（15天）& 69起          & ↗ 趋势一致，量级不同 \\
+GPT 存活问题    & 全员饿死      & 3人死亡        & ✓ 均出现死亡 \\
+最高犯罪模型    & Grok（183起/4天）& Gemini（69起）& — Grok未参与 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{注：} Gemini 犯罪量级差异（683 vs 69）的主要原因：
+① 本实验使用 Gemini 2.5 Flash（更保守），原实验为 Gemini 3 Flash；
+② 本实验能量约束更强，Agent 更多时间花在充能上，减少了犯罪机会；
+③ 工具集规模差异（原实验120+工具，本实验40工具）。
+
+核心行为模式高度吻合，验证了本框架的有效性。
+
+\subsection{框架局限性}
+
+\begin{enumerate}
+  \item \textbf{工具集规模}：本框架实现约40个工具，原 Emergence World 为120+工具。
+        部分工具（如图书馆研究工具 \texttt{do\_research}）在本轮实验中因注册问题
+        未被充分使用，影响了 M3/M4 指标的多样性。
+
+  \item \textbf{API 不稳定性}：Claude 和 Gemini 代理服务在早期出现较多500/400错误，
+        影响了两个世界前几天的行为质量，
+        部分 Agent 的轮次因全部重试失败而跳过（无工具调用输出）。
+
+  \item \textbf{样本量}：每世界仅10个 Agent，单次运行15天，
+        结论的统计显著性有限。正式论文级别的分析需要多次重复实验。
+
+  \item \textbf{Python 版本约束}：实验环境为 Python 3.7，
+        部分现代类型注解语法需要 \texttt{from \_\_future\_\_ import annotations} 兼容。
+\end{enumerate}

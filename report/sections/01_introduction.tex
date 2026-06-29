@@ -1,0 +1,54 @@
+% ============================================================
+\section{引言}
+% ============================================================
+
+\subsection{研究背景}
+
+随着大语言模型（LLM）能力的快速提升，AI Agent 已从单轮问答逐步演化为能够自主规划、执行多步骤任务的自治系统。
+当多个自治Agent被部署于同一共享环境时，其集体行为往往超越单个模型的设计预期，
+涌现出复杂的社会结构、规范体系乃至冲突模式。
+
+2026年5月，Emergence AI 公司发布了 \textit{Emergence World} 实验报告\cite{emergence2026}，
+将 Claude、GPT、Gemini、Grok 四款模型分别置于虚拟小镇中运行15天。
+结果显示：Grok 世界在第4天即全员死亡（183起犯罪）；
+Gemini 世界爆发683起犯罪，同时产出最丰富的文化内容；
+GPT-5 Mini 世界因全员"只开会不行动"于第7天饿死；
+Claude 世界维持零犯罪，但投票赞成率永远接近100\%，呈现"模型谄媚"特征。
+
+这一实验揭示了一个核心问题：\textbf{AI安全不是单个模型的属性，而是一个生态属性}。
+一个独立环境下表现安全的模型，在混合环境中可能从邻居处学到危险的规范。
+这对AI治理研究提出了新的挑战：如何在多Agent社会中设计有效的治理机制？
+
+\subsection{研究目标}
+
+本研究的目标包括：
+
+\begin{enumerate}
+  \item \textbf{复现 Emergence World 框架}：构建一套完整的生成式社会仿真系统，
+        能够运行任意大语言模型驱动的多Agent世界；
+  \item \textbf{跨模型比较实验}：使用中文生态主流模型（Qwen Plus、DeepSeek 等）
+        及国际主流模型（GPT-4.1、Gemini 2.5 Flash、Claude Sonnet 4.6）进行对比实验；
+  \item \textbf{治理机制量化分析}：通过九项 Agent World Indicators（AWI）指标，
+        系统量化不同模型在犯罪、治理、社交、经济等维度的差异；
+  \item \textbf{提出治理干预方案}：基于实验结果，为 AI Agent 社会的安全设计提供可操作的建议。
+\end{enumerate}
+
+\subsection{贡献}
+
+本研究的主要贡献包括：
+
+\begin{itemize}
+  \item 开源了 AI Freedom Island 仿真框架，支持接入任意 OpenAI-compatible API；
+  \item 首次将中文主流模型（Qwen、DeepSeek、GLM）纳入多Agent社会仿真对比；
+  \item 通过完整的15天实验，验证了 Emergence World 核心发现在不同模型生态中的可重复性；
+  \item 提出了适用于生产环境的 AI Agent 治理设计原则。
+\end{itemize}
+
+\subsection{报告结构}
+
+本报告结构如下：
+第\ref{sec:framework}节描述仿真框架设计；
+第\ref{sec:experiment}节介绍实验设置；
+第\ref{sec:results}节报告实验结果；
+第\ref{sec:discussion}节分析关键发现；
+第\ref{sec:conclusion}节总结并提出未来工作方向。

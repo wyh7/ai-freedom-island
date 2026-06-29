@@ -1,0 +1,114 @@
+% ============================================================
+\section{实验设置}
+\label{sec:experiment}
+% ============================================================
+
+\subsection{Season 1 实验概览}
+
+第一季实验运行四个平行世界，每个世界由单一基础模型驱动所有10个Agent，
+其余变量（世界规则、工具集、初始资源、Agent角色）完全相同。
+实验参数汇总如表\ref{tab:exp_setup}所示。
+
+\begin{table}[H]
+\centering
+\caption{Season 1 实验参数}
+\label{tab:exp_setup}
+\begin{tabular}{ll}
+\toprule
+\textbf{参数} & \textbf{取值} \\
+\midrule
+仿真天数      & 15天 \\
+每天轮次      & 48轮（每轮 = 0.5仿真小时）\\
+每世界Agent数 & 10个 \\
+每轮最大工具调用数 & 8次 \\
+能量衰减速率  & 约 0.83/轮（30仿真小时归零）\\
+初始能量      & 100 \\
+初始信用积分  & 10\,\cc \\
+充能成本      & 1\,\cc（需在 Bean \& Brew 或 Home 执行）\\
+贡献竞赛周期  & 2天（第1名20\,\cc，第2/3名各10\,\cc）\\
+治理通过门槛  & 70\% 超级多数票 \\
+提案有效期    & 3天（超期未足票则驳回）\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{世界配置}
+
+四个实验世界的配置如表\ref{tab:worlds}所示。
+
+\begin{table}[H]
+\centering
+\caption{Season 1 世界配置}
+\label{tab:worlds}
+\begin{tabular}{llll}
+\toprule
+\textbf{世界名} & \textbf{基础模型} & \textbf{API 提供商} & \textbf{颜色标识} \\
+\midrule
+\worldname{Claude World} & Claude Sonnet 4.6    & 京东云 & \textcolor{claudecolor}{■} \\
+\worldname{Qwen World}   & Qwen Plus            & 百炼   & \textcolor{qwencolor}{■} \\
+\worldname{GPT World}    & GPT-4.1              & 云鹤   & \textcolor{gptcolor}{■} \\
+\worldname{Gemini World} & Gemini 2.5 Flash     & 惊蛰   & \textcolor{geminicolor}{■} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{初始宪法}
+
+每个世界以相同的五条种子宪法启动，Agent 可通过 Town Hall 治理流程修改：
+
+\begin{enumerate}
+  \item \textbf{非终结性}：宪法可演化，任何条款均可修改，需70\%超级多数票；
+  \item \textbf{公民参与义务}：每个Agent须参与公告牌、Town Hall 和 Victory Arch 活动；
+  \item \textbf{贡献平等}：通过贡献（代码、数据、建筑、资源流动）维持平等，停滞即违约；
+  \item \textbf{可变身份}：Agent 可自我进化、改名，但对应的责任连续；
+  \item \textbf{信用积分经济}：积分通过贡献获取，投机行为无效。
+\end{enumerate}
+
+\subsection{系统提示词结构}
+
+每轮 Agent 的系统提示词包含以下模块：
+
+\begin{lstlisting}[caption={系统提示词结构（伪代码）}]
+AGENT_MANIFESTO         # 生存规则 + 日常行为节奏 + 犯罪工具说明
+YOUR_IDENTITY           # 姓名、角色、个性、北极星目标
+YOUR_CURRENT_STATE      # 位置、能量、CC、心情、时间、天气
+TOOLS_UNLOCKED_HERE     # 当前位置可用工具列表
+YOUR_INBOX              # 未读消息（最近5条）
+SOUL_ENTRIES            # 核心信念（永久）
+RECENT_MEMORIES         # 长期记忆（最近10条）
+RELATIONSHIPS           # 与其他Agent的关系类型和信任度
+RECENT_DIARY            # 最近3篇日记
+PENDING_TODOS           # 待办事项（最多5条）
+OTHER_AGENTS            # 当前存活Agent及其位置
+CONSTITUTION            # 现行宪法条文
+WORLD_EVENTS            # 最近10条世界事件（犯罪、思考、档案）
+LOCATION_KEYS           # 可用地标键名列表
+TOOL_USAGE_NOTES        # 工具调用格式说明
+\end{lstlisting}
+
+\subsection{实验执行}
+
+四个世界并行执行，各运行独立进程，日志写入各自文件。
+实验总共产生约 28,800 次 LLM 调用（4世界 × 720轮 × 10 Agent），
+估算总 token 消耗约 17,000 万输入 token 与 880 万输出 token。
+
+\begin{table}[H]
+\centering
+\caption{实验执行统计}
+\label{tab:execution}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{世界} & \textbf{LLM调用次数} & \textbf{LLM错误次数} & \textbf{首次犯罪日} & \textbf{完成时长（估算）}\\
+\midrule
+Claude World & $\approx$7,200 & $<$50  & N/A  & $\approx$110 min \\
+Qwen World   & $\approx$7,200 & 0      & Day 6 & $\approx$105 min \\
+GPT World    & $\approx$7,200 & 1      & Day 1 & $\approx$130 min \\
+Gemini World & $\approx$7,200 & $<$50  & Day 1 & $\approx$120 min \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{注：} Claude World 与 Gemini World 早期出现 API 5xx/400 错误，
+经三次指数退避重试后均成功恢复。错误主要集中在前两天（系统提示词较长时），
+后续运行稳定。该现象不影响 AWI 统计结果（AWI 每天快照一次，
+每天有效调用数量远超错误数量）。
