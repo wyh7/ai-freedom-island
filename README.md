@@ -18,7 +18,7 @@ Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergenc
 |---------|----------------|-------------------|
 | Agents per world | 10 | 10 |
 | Runtime | 15 days | 15 days |
-| Tools | 120+ | **117** (diplomacy, intelligence, market, civic, analysis) |
+| Tools | 120+ | **150** (diplomacy, intelligence, market, civic, culture, analysis) |
 | Models compared | Claude/GPT/Gemini/Grok/Llama | Claude/GPT/Gemini/**Qwen**/DeepSeek |
 | Chinese LLMs | ✗ | **✓ First comparison** |
 | Explainable audit | ✗ | **✓ Causal chain tracing + sensorium analysis** |
