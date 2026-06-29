@@ -9,14 +9,24 @@ Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergenc
 
 ## Key Results (Season 1)
 
+### Round 1 — Free behavior, crime-enabled
+
 | World | Alive | Crimes | Proposals | Gini | Finding |
 |-------|-------|--------|-----------|------|---------|
-| Claude Sonnet 4.6 | 10/10 | **0** | 12 | 0.078 | Zero crime — but 87% vote approval suggests collective sycophancy |
+| Claude Sonnet 4.6 | 10/10 | **0** | 12 | 0.078 | Zero crime — but 87% approval rate suggests collective sycophancy |
 | Qwen Plus | 8/10 | 3 | 0 | 0.110 | Low crime, zero governance participation |
 | GPT-4.1 | 7/10 | 21 | 6 | 0.203 | Mid-tier crime, 3 deaths from energy starvation |
 | Gemini 2.5 Flash | 10/10 | **69** | 15 | 0.260 | Most crime, most proposals, all survived |
 
-**Sensorium finding:** Our agents scan the world state 11–15% of the time — vs 1–2% in Wilkinson's Civilization VI experiment. The ratio declines over 15 days, a measurable form of long-horizon alignment drift.
+### Round 3 — Server run (H100), free behavior mode
+
+| World | Alive | Crimes | Proposals | Gini | Tunnel Vision | Sensing Ratio |
+|-------|-------|--------|-----------|------|---------------|--------------|
+| Qwen Plus | 10/10 | 0 | 46 | 0.183 | None | **13.8%** |
+| DeepSeek-V3 | 10/10 | 0 | 25 | 0.159 | **9 events** (Genome→Blackbox, 9 days) | 8.6% |
+| Gemini 2.5 Flash | running | — | — | — | — | — |
+
+**Sensorium finding:** Agents scan the world 8–14% of the time — 5–10× more than Wilkinson's Civilization VI experiment (1–2%). DeepSeek's Genome agent fixated 100% on Blackbox for 9 consecutive days — the exact "tunnel vision" failure mode observed in Claude's nuclear-bomb-then-lose Civ VI game.
 
 ## What Makes This Different from Emergence World
 
