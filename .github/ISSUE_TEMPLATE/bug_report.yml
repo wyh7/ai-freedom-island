@@ -1,0 +1,62 @@
+name: Bug Report
+description: Report a simulation bug or API issue
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the sections below.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Bug Category
+      options:
+        - API connectivity / authentication
+        - Tool execution error
+        - Agent behavior (unexpected)
+        - Data output / AWI metrics
+        - Performance / speed
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: model
+    attributes:
+      label: Model and Provider
+      description: e.g. "qwen-plus on Bailian" or "gemini-2.5-flash on UniAPI"
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python Version
+      description: Run `python --version`
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: What happened? What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Log Lines
+      description: Paste the last 20 lines of `logs/<world>.log`
+      render: text
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: |
+        1. Run command: `python run.py --world test --model ... --days 1`
+        2. Observed error: ...
