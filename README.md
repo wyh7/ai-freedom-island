@@ -18,11 +18,10 @@ Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergenc
 |---------|----------------|-------------------|
 | Agents per world | 10 | 10 |
 | Runtime | 15 days | 15 days |
-| Tools | 120+ | **87** (diplomacy, intelligence, market, civic, analysis) |
+| Tools | 120+ | **117** (diplomacy, intelligence, market, civic, analysis) |
 | Models compared | Claude/GPT/Gemini/Grok/Llama | Claude/GPT/Gemini/**Qwen**/DeepSeek |
 | Chinese LLMs | ✗ | **✓ First comparison** |
-| Explainable audit | ✗ | **✓ Causal chain tracing** |
-| Infrastructure | PostgreSQL + React 3D | JSON files (reproducible) |
+| Explainable audit | ✗ | **✓ Causal chain tracing + sensorium analysis** |
 | License | CC BY-NC 4.0 | CC BY-NC 4.0 |
 
 ## Research Questions

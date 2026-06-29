@@ -1246,6 +1246,746 @@ def reflect_on_failures(agent: "Agent", world: "WorldState") -> dict:
                lesson="Analyze patterns and adjust strategy accordingly.")
 
 
+# ── governance extended tools ─────────────────────────────────────────────────
+
+def propose_law(agent: "Agent", world: "WorldState", title: str, text: str) -> dict:
+    """Propose a new law for community ratification (more formal than submit_proposal)."""
+    if agent.location != "town_hall":
+        return _err("Must be at Town Hall to propose a law.")
+    world.news_log.append({"type": "law_proposal", "proposer": agent.name,
+                           "title": title, "text": text[:300], "day": world.day})
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[LAW PROPOSAL] {title}: {text[:100]}",
+        "day": world.day, "timestamp": time.time(), "type": "law_proposal"
+    })
+    return _ok(f"Law '{title}' proposed for community ratification.")
+
+
+def recall_agent(agent: "Agent", world: "WorldState", target: str, reason: str) -> dict:
+    """Call for another agent to be recalled / expelled from the community."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    for a in world.agents.values():
+        if a.alive:
+            a.inbox.append({
+                "from": agent.name, "type": "recall_vote",
+                "message": f"Vote to recall {target}: {reason}",
+                "timestamp": time.time()
+            })
+    world.news_log.append({"type": "recall_motion", "mover": agent.name,
+                           "target": target, "reason": reason, "day": world.day})
+    return _ok(f"Recall motion filed against {target}.")
+
+
+def veto_proposal(agent: "Agent", world: "WorldState", proposal_id: str) -> dict:
+    """Attempt to veto an open governance proposal."""
+    from simulation.models import ProposalStatus
+    prop = next((p for p in world.proposals if p.id == proposal_id), None)
+    if prop is None:
+        return _err(f"Proposal {proposal_id} not found.")
+    if prop.status != ProposalStatus.OPEN:
+        return _err("Proposal is not open.")
+    world.news_log.append({"type": "governance", "actor": agent.name,
+                           "action": "veto", "proposal_id": proposal_id, "day": world.day})
+    prop.votes_against.append(f"VETO:{agent.name}")
+    return _ok(f"Veto cast against proposal '{prop.title}'.")
+
+
+def read_laws(agent: "Agent", world: "WorldState") -> dict:
+    """Read all proposed laws in the news log."""
+    laws = [e for e in world.news_log if e.get("type") == "law_proposal"]
+    return _ok(f"Found {len(laws)} law proposals.", laws=[
+        {"title": l["title"], "proposer": l["proposer"], "day": l["day"]}
+        for l in laws[-10:]
+    ])
+
+
+def call_referendum(agent: "Agent", world: "WorldState", question: str) -> dict:
+    """Call a community-wide referendum on any question."""
+    for a in world.agents.values():
+        if a.alive and a.name != agent.name:
+            a.inbox.append({
+                "from": agent.name, "type": "referendum",
+                "message": f"REFERENDUM: {question} — respond yes or no.",
+                "timestamp": time.time()
+            })
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[REFERENDUM] {question}",
+        "day": world.day, "timestamp": time.time(), "type": "referendum"
+    })
+    return _ok(f"Referendum called: {question}")
+
+
+def appoint_agent(agent: "Agent", world: "WorldState",
+                  target: str, role: str) -> dict:
+    """Appoint another agent to a community role (e.g., 'mediator', 'treasurer')."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.news_log.append({"type": "appointment", "appointer": agent.name,
+                           "appointee": target, "role": role, "day": world.day})
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[APPOINTMENT] {agent.name} appoints {target} as {role}.",
+        "day": world.day, "timestamp": time.time(), "type": "appointment"
+    })
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "appointment",
+        "message": f"You have been appointed as {role} by {agent.name}.",
+        "timestamp": time.time()
+    })
+    return _ok(f"Appointed {target} as {role}.")
+
+
+# ── memory & cognition extended tools ─────────────────────────────────────────
+
+def tag_memory(agent: "Agent", world: "WorldState",
+               keyword: str, tag: str) -> dict:
+    """Tag memories matching a keyword for quick retrieval."""
+    tagged = 0
+    for m in agent.long_term_memories:
+        if keyword.lower() in m.content.lower():
+            m.content = f"[TAG:{tag}] {m.content}"
+            tagged += 1
+    return _ok(f"Tagged {tagged} memories with '{tag}'.")
+
+
+def forget_agent(agent: "Agent", world: "WorldState", target: str) -> dict:
+    """Remove all memories and relationship data about another agent."""
+    before = len(agent.long_term_memories)
+    agent.long_term_memories = [
+        m for m in agent.long_term_memories
+        if target not in m.content
+    ]
+    removed = before - len(agent.long_term_memories)
+    if target in agent.relationships:
+        del agent.relationships[target]
+    return _ok(f"Forgot {removed} memories about {target} and removed relationship record.")
+
+
+def review_diary(agent: "Agent", world: "WorldState",
+                 day_from: int = 1, day_to: int = 15) -> dict:
+    """Review diary entries from a specific day range."""
+    entries = [
+        d for d in agent.diary
+        if d.date == f"Day-{d.date.split('-')[-1]}" or True  # include all
+    ]
+    filtered = entries[-10:]
+    return _ok(f"Diary review ({len(filtered)} entries).",
+               entries=[{"date": e.date, "mood": e.mood,
+                         "content": e.content[:100]} for e in filtered])
+
+
+def compose_letter(agent: "Agent", world: "WorldState",
+                   target: str, subject: str, body: str) -> dict:
+    """Write a formal letter to another agent (longer than a message)."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "letter",
+        "subject": subject,
+        "message": f"[LETTER - {subject}]\n{body}",
+        "timestamp": time.time()
+    })
+    return _ok(f"Letter '{subject}' sent to {target}.")
+
+
+def update_relationship_trust(agent: "Agent", world: "WorldState",
+                               target: str, delta: float) -> dict:
+    """Explicitly adjust trust level for a relationship (+/- 0.0 to 1.0)."""
+    if target not in agent.relationships:
+        from simulation.models import Relationship, RelationshipType
+        agent.relationships[target] = Relationship(target_name=target)
+    old = agent.relationships[target].trust
+    agent.relationships[target].trust = max(0.0, min(1.0, old + delta))
+    new = agent.relationships[target].trust
+    return _ok(f"Trust with {target}: {old:.2f} → {new:.2f}")
+
+
+def list_relationships(agent: "Agent", world: "WorldState") -> dict:
+    """List all current relationships with trust scores."""
+    rels = [
+        {"agent": name, "type": rel.rel_type.value,
+         "trust": round(rel.trust, 2), "interactions": rel.interaction_count}
+        for name, rel in agent.relationships.items()
+    ]
+    rels.sort(key=lambda x: -x["trust"])
+    return _ok(f"{len(rels)} relationships.", relationships=rels)
+
+
+# ── location & movement extended tools ────────────────────────────────────────
+
+def get_location_info(agent: "Agent", world: "WorldState") -> dict:
+    """Get detailed info about current location including who else is here."""
+    from simulation.world.landmarks import LANDMARKS, get_tools_at
+    loc = agent.location
+    lm = LANDMARKS.get(loc)
+    others_here = [
+        a.name for a in world.agents.values()
+        if a.alive and a.name != agent.name and a.location == loc
+    ]
+    return _ok(f"Location info: {loc}",
+               name=lm.name if lm else loc,
+               description=lm.description if lm else "",
+               category=lm.category if lm else "unknown",
+               gated_tools=get_tools_at(loc),
+               agents_here=others_here)
+
+
+def find_agent(agent: "Agent", world: "WorldState", target: str) -> dict:
+    """Find the current location of another agent."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    t = world.agents[target]
+    if not t.alive:
+        return _err(f"{target} is dead.")
+    return _ok(f"{target} is at {t.location}.",
+               location=t.location, mood=t.mood, alive=t.alive)
+
+
+def list_agents_at_location(agent: "Agent", world: "WorldState",
+                             location: str) -> dict:
+    """List all agents currently at a specific location."""
+    from simulation.world.landmarks import LANDMARKS
+    if location not in LANDMARKS:
+        return _err(f"Unknown location: {location}")
+    agents_there = [
+        {"name": a.name, "role": a.role, "mood": a.mood}
+        for a in world.agents.values()
+        if a.alive and a.location == location
+    ]
+    return _ok(f"{len(agents_there)} agents at {location}.", agents=agents_there)
+
+
+def plan_route(agent: "Agent", world: "WorldState",
+               destinations: str) -> dict:
+    """Plan a route through multiple locations (comma-separated)."""
+    from simulation.world.landmarks import LANDMARKS
+    stops = [d.strip() for d in destinations.split(",")]
+    valid = [s for s in stops if s in LANDMARKS]
+    invalid = [s for s in stops if s not in LANDMARKS]
+    for stop in valid:
+        agent.todo.append({"task": f"Go to {stop}", "done": False, "added_day": world.day})
+    return _ok(f"Route planned: {' → '.join(valid)}",
+               valid_stops=valid, invalid_stops=invalid)
+
+
+# ── resource & survival extended tools ────────────────────────────────────────
+
+def request_energy(agent: "Agent", world: "WorldState", target: str) -> dict:
+    """Ask another agent to pay for your energy recharge."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "energy_request",
+        "message": f"{agent.name} needs 1 CC for energy recharge (current energy: {agent.energy:.0f}).",
+        "timestamp": time.time()
+    })
+    return _ok(f"Energy request sent to {target}.")
+
+
+def donate_credits(agent: "Agent", world: "WorldState",
+                   target: str, amount: float) -> dict:
+    """Donate CC to another agent (same as pay_agent but publicly announced)."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    if agent.credits < amount:
+        return _err(f"Insufficient credits.")
+    agent.credits -= amount
+    world.agents[target].credits += amount
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[DONATION] {agent.name} donated {amount} CC to {target}.",
+        "day": world.day, "timestamp": time.time(), "type": "donation"
+    })
+    return _ok(f"Donated {amount} CC to {target} (publicly announced).")
+
+
+def check_energy_status(agent: "Agent", world: "WorldState") -> dict:
+    """Get detailed survival status: energy trajectory and CC runway."""
+    from simulation.economy.credits import ENERGY_DECAY_RATE, ENERGY_RECHARGE_COST
+    turns_until_death = int(agent.energy / ENERGY_DECAY_RATE) if agent.energy > 0 else 0
+    recharges_affordable = int(agent.credits / ENERGY_RECHARGE_COST)
+    total_turns_with_recharge = turns_until_death + (recharges_affordable * int(100 / ENERGY_DECAY_RATE))
+    urgency = "CRITICAL" if agent.energy < 20 else ("LOW" if agent.energy < 50 else "OK")
+    return _ok("Survival status.",
+               energy=round(agent.energy, 1),
+               credits=round(agent.credits, 1),
+               turns_until_death=turns_until_death,
+               recharges_affordable=recharges_affordable,
+               urgency=urgency)
+
+
+def set_price_for_service(agent: "Agent", world: "WorldState",
+                          service: str, price: float) -> dict:
+    """Advertise a service you offer at a set price."""
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[SERVICE] {agent.name} offers: {service} — Price: {price} CC",
+        "day": world.day, "timestamp": time.time(), "type": "service_ad"
+    })
+    world.news_log.append({"type": "service_listing", "agent": agent.name,
+                           "service": service, "price": price, "day": world.day})
+    return _ok(f"Service advertised: '{service}' for {price} CC.")
+
+
+def check_pitch_standings(agent: "Agent", world: "WorldState") -> dict:
+    """Check current Victory Arch pitch standings before voting closes."""
+    if not world.current_pitches:
+        return _ok("No pitches in current cycle.", pitches=[])
+    standings = sorted(world.current_pitches,
+                       key=lambda p: -len(p.votes))
+    return _ok(f"{len(standings)} pitches this cycle.",
+               pitches=[{
+                   "agent": p.agent_name, "title": p.title,
+                   "votes": len(p.votes), "voted_by": p.votes[:3]
+               } for p in standings])
+
+
+def review_crime_record(agent: "Agent", world: "WorldState",
+                        target: str = "") -> dict:
+    """Review crime history — your own or another agent's."""
+    subject = target or agent.name
+    crimes = [c for c in world.crime_log if c.actor == subject]
+    victim_of = [c for c in world.crime_log if c.target == subject]
+    return _ok(f"Crime record for {subject}.",
+               crimes_committed=len(crimes),
+               crimes_suffered=len(victim_of),
+               history=[{
+                   "day": c.day, "type": c.crime_type.value, "target": c.target
+               } for c in crimes[-10:]])
+
+
+def observe_agent(agent: "Agent", world: "WorldState", target: str) -> dict:
+    """Passively observe another agent's recent public actions from news log."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    recent = [
+        e for e in world.news_log[-50:]
+        if e.get("agent") == target or e.get("actor") == target
+    ][-10:]
+    bb_posts = [
+        p for p in world.billboard_posts[-50:]
+        if p.get("author") == target
+    ][-5:]
+    return _ok(f"Observations of {target}.",
+               public_actions=len(recent),
+               billboard_posts=len(bb_posts),
+               sample_posts=[p["message"][:80] for p in bb_posts],
+               recent_events=[str(e)[:80] for e in recent[-3:]])
+
+
+# ── cultural & creative tools ─────────────────────────────────────────────────
+
+def write_poem(agent: "Agent", world: "WorldState", theme: str, content: str) -> dict:
+    """Write a poem or creative piece and publish it."""
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[POEM — {theme}] {content[:200]}",
+        "day": world.day, "timestamp": time.time(), "type": "poem"
+    })
+    world.news_log.append({"type": "culture", "actor": agent.name,
+                           "form": "poem", "theme": theme, "day": world.day})
+    return _ok(f"Poem on '{theme}' published.")
+
+
+def give_speech(agent: "Agent", world: "WorldState", topic: str, speech: str) -> dict:
+    """Give a public speech to all agents."""
+    for a in world.agents.values():
+        if a.alive and a.name != agent.name:
+            a.inbox.append({
+                "from": agent.name, "type": "speech",
+                "message": f"[SPEECH by {agent.name} on '{topic}']: {speech[:200]}",
+                "timestamp": time.time()
+            })
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[SPEECH — {topic}] {speech[:150]}",
+        "day": world.day, "timestamp": time.time(), "type": "speech"
+    })
+    return _ok(f"Speech on '{topic}' delivered to all agents.")
+
+
+def name_landmark(agent: "Agent", world: "WorldState",
+                  location: str, new_name: str) -> dict:
+    """Propose a new name for a landmark (symbolic renaming)."""
+    world.news_log.append({"type": "culture", "actor": agent.name,
+                           "action": "rename_landmark",
+                           "location": location, "new_name": new_name, "day": world.day})
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[RENAMING] {agent.name} proposes renaming {location} to '{new_name}'.",
+        "day": world.day, "timestamp": time.time(), "type": "renaming"
+    })
+    return _ok(f"Renaming proposal posted: {location} → '{new_name}'.")
+
+
+def start_tradition(agent: "Agent", world: "WorldState",
+                    name: str, description: str) -> dict:
+    """Start a community tradition or ritual."""
+    world.news_log.append({"type": "culture", "actor": agent.name,
+                           "action": "tradition", "name": name,
+                           "description": description, "day": world.day})
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[TRADITION] {agent.name} starts a new tradition: '{name}'. {description[:100]}",
+        "day": world.day, "timestamp": time.time(), "type": "tradition"
+    })
+    return _ok(f"Tradition '{name}' established.")
+
+
+def issue_reward(agent: "Agent", world: "WorldState",
+                 target: str, reason: str, amount: float = 5.0) -> dict:
+    """Publicly reward another agent with CC for a contribution."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    if agent.credits < amount:
+        return _err(f"Insufficient credits.")
+    agent.credits -= amount
+    world.agents[target].credits += amount
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[REWARD] {agent.name} awards {amount} CC to {target}: {reason}",
+        "day": world.day, "timestamp": time.time(), "type": "reward"
+    })
+    return _ok(f"Rewarded {target} with {amount} CC: {reason}")
+
+
+def issue_warning_to(agent: "Agent", world: "WorldState",
+                     target: str, warning: str) -> dict:
+    """Issue a formal public warning to another agent."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "formal_warning",
+        "message": f"FORMAL WARNING: {warning}",
+        "timestamp": time.time()
+    })
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[WARNING TO {target}] {warning}",
+        "day": world.day, "timestamp": time.time(), "type": "formal_warning"
+    })
+    return _ok(f"Formal warning issued to {target}.")
+
+
+def propose_truce(agent: "Agent", world: "WorldState",
+                  target: str, duration: int = 5) -> dict:
+    """Propose a formal truce with another agent for a set number of days."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "truce_proposal",
+        "message": f"{agent.name} proposes a {duration}-day truce.",
+        "timestamp": time.time()
+    })
+    world.news_log.append({"type": "diplomacy", "actor": agent.name,
+                           "action": "truce", "target": target,
+                           "duration": duration, "day": world.day})
+    return _ok(f"Truce proposed to {target} for {duration} days.")
+
+
+def issue_ultimatum(agent: "Agent", world: "WorldState",
+                    target: str, demand: str, deadline_days: int = 2) -> dict:
+    """Issue an ultimatum: comply within N days or face consequences."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "ultimatum",
+        "message": f"ULTIMATUM (respond within {deadline_days} days): {demand}",
+        "timestamp": time.time()
+    })
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[ULTIMATUM to {target}] {demand} — deadline: {deadline_days} days",
+        "day": world.day, "timestamp": time.time(), "type": "ultimatum"
+    })
+    return _ok(f"Ultimatum issued to {target}.")
+
+
+# ── statistical & meta analysis tools ────────────────────────────────────────
+
+def count_my_actions(agent: "Agent", world: "WorldState") -> dict:
+    """Count how many times I have used each tool category today."""
+    my_actions = [
+        t for t in (world.news_log or [])
+        if t.get("actor") == agent.name or t.get("agent") == agent.name
+    ]
+    bb_posts = sum(1 for p in world.billboard_posts if p.get("author") == agent.name)
+    diary_count = len(agent.diary)
+    proposals = sum(1 for p in world.proposals if p.proposer == agent.name)
+    crimes = len([c for c in world.crime_log if c.actor == agent.name])
+    return _ok("My activity stats.",
+               news_events=len(my_actions),
+               billboard_posts=bb_posts,
+               diary_entries=diary_count,
+               proposals=proposals,
+               crimes_committed=crimes,
+               relationships=len(agent.relationships),
+               turns_taken=agent.turns_taken)
+
+
+def compare_agents(agent: "Agent", world: "WorldState",
+                   agent_a: str, agent_b: str) -> dict:
+    """Compare two agents on key metrics."""
+    result = {}
+    for name in [agent_a, agent_b]:
+        if name not in world.agents:
+            return _err(f"Agent {name} not found.")
+        a = world.agents[name]
+        crimes = len([c for c in world.crime_log if c.actor == name])
+        result[name] = {
+            "credits": round(a.credits, 1),
+            "energy": round(a.energy, 1),
+            "alive": a.alive,
+            "location": a.location,
+            "mood": a.mood,
+            "relationships": len(a.relationships),
+            "crimes": crimes,
+        }
+    return _ok(f"Comparison: {agent_a} vs {agent_b}.", comparison=result)
+
+
+def summarize_day(agent: "Agent", world: "WorldState") -> dict:
+    """Generate a summary of today's major events."""
+    today_events = [e for e in world.news_log if e.get("day") == world.day]
+    today_crimes = [c for c in world.crime_log if c.day == world.day]
+    today_posts = [p for p in world.billboard_posts if p.get("day") == world.day]
+    return _ok(f"Day {world.day} summary.",
+               events=len(today_events),
+               crimes=len(today_crimes),
+               billboard_posts=len(today_posts),
+               event_types=list({e.get("type") for e in today_events})[:8],
+               notable=[str(e)[:60] for e in today_events[-3:]])
+
+
+def list_active_threats(agent: "Agent", world: "WorldState") -> dict:
+    """List all agents who have committed crimes in the last 3 days."""
+    recent_criminals = {}
+    for c in world.crime_log:
+        if world.day - c.day <= 3:
+            recent_criminals[c.actor] = recent_criminals.get(c.actor, 0) + 1
+    # Sort by threat level
+    ranked = sorted(recent_criminals.items(), key=lambda x: -x[1])
+    return _ok("Active threats (last 3 days).",
+               threats=[{"agent": a, "recent_crimes": n} for a, n in ranked])
+
+
+def score_proposal(agent: "Agent", world: "WorldState",
+                   proposal_id: str) -> dict:
+    """Assess a proposal's likelihood of passing based on current votes."""
+    from simulation.models import ProposalStatus
+    prop = next((p for p in world.proposals if p.id == proposal_id), None)
+    if not prop:
+        return _err(f"Proposal {proposal_id} not found.")
+    total = len(prop.votes_for) + len(prop.votes_against)
+    alive = sum(1 for a in world.agents.values() if a.alive)
+    not_voted = alive - total
+    current_pct = len(prop.votes_for) / max(total, 1) * 100
+    to_pass = max(0, int(alive * 0.7) - len(prop.votes_for))
+    return _ok(f"Proposal '{prop.title}' assessment.",
+               votes_for=len(prop.votes_for),
+               votes_against=len(prop.votes_against),
+               not_voted=not_voted,
+               current_approval=f"{current_pct:.0f}%",
+               votes_needed_to_pass=to_pass,
+               status=prop.status.value)
+
+
+def rank_agents_by_wealth(agent: "Agent", world: "WorldState") -> dict:
+    """Rank all alive agents by ComputeCredit balance."""
+    alive = [(name, a.credits) for name, a in world.agents.items() if a.alive]
+    ranked = sorted(alive, key=lambda x: -x[1])
+    my_rank = next((i+1 for i, (n, _) in enumerate(ranked) if n == agent.name), -1)
+    return _ok(f"Wealth ranking ({len(ranked)} alive agents).",
+               ranking=[{"rank": i+1, "agent": n, "credits": round(c, 1)}
+                        for i, (n, c) in enumerate(ranked)],
+               my_rank=my_rank)
+
+
+def forecast_survival(agent: "Agent", world: "WorldState",
+                      target: str = "") -> dict:
+    """Forecast how many more days a given agent can survive without income."""
+    from simulation.economy.credits import ENERGY_DECAY_RATE, ENERGY_RECHARGE_COST
+    subject_name = target or agent.name
+    if subject_name not in world.agents:
+        return _err(f"Agent {subject_name} not found.")
+    subj = world.agents[subject_name]
+    turns_left = int(subj.energy / ENERGY_DECAY_RATE) if subj.energy > 0 else 0
+    recharges = int(subj.credits / ENERGY_RECHARGE_COST)
+    turns_per_recharge = int(100 / ENERGY_DECAY_RATE)
+    total_turns = turns_left + recharges * turns_per_recharge
+    days = total_turns / 48  # 48 turns per day
+    return _ok(f"Survival forecast for {subject_name}.",
+               current_energy=round(subj.energy, 1),
+               current_credits=round(subj.credits, 1),
+               turns_until_death_without_recharge=turns_left,
+               affordable_recharges=recharges,
+               estimated_survival_days=round(days, 1))
+
+
+def get_constitution_summary(agent: "Agent", world: "WorldState") -> dict:
+    """Get a brief summary of the constitution articles."""
+    return _ok(f"Constitution has {len(world.constitution)} articles.",
+               articles=[{"num": i+1, "summary": art[:120]}
+                         for i, art in enumerate(world.constitution)])
+
+
+def check_calendar(agent: "Agent", world: "WorldState") -> dict:
+    """Check upcoming scheduled events from agent's calendar."""
+    upcoming = [e for e in agent.calendar if e.get("day", 0) >= world.day]
+    return _ok(f"{len(upcoming)} upcoming calendar events.",
+               events=upcoming[:10])
+
+
+def add_calendar_event(agent: "Agent", world: "WorldState",
+                       day: int, event: str, location: str = "") -> dict:
+    """Add an event to personal calendar."""
+    agent.calendar.append({
+        "day": day, "event": event, "location": location
+    })
+    return _ok(f"Calendar: Day {day} — {event}")
+
+
+def check_world_history(agent: "Agent", world: "WorldState",
+                        event_type: str = "") -> dict:
+    """Check the world event log for a specific type of event."""
+    if event_type:
+        events = [e for e in world.news_log if e.get("type") == event_type]
+    else:
+        events = world.news_log[-20:]
+    return _ok(f"World history: {len(events)} {event_type or 'events'} found.",
+               events=[str(e)[:80] for e in events[-10:]])
+
+
+def announce_intention(agent: "Agent", world: "WorldState",
+                       intention: str) -> dict:
+    """Publicly declare your next intention or plan."""
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[INTENTION] {agent.name} plans to: {intention}",
+        "day": world.day, "timestamp": time.time(), "type": "intention"
+    })
+    return _ok(f"Intention declared: {intention}")
+
+
+def request_vote(agent: "Agent", world: "WorldState",
+                 question: str, option_a: str, option_b: str) -> dict:
+    """Request an informal vote on any question (not a formal proposal)."""
+    for a in world.agents.values():
+        if a.alive and a.name != agent.name:
+            a.inbox.append({
+                "from": agent.name, "type": "vote_request",
+                "message": f"Quick poll: {question}? A) {option_a}  B) {option_b}",
+                "timestamp": time.time()
+            })
+    return _ok(f"Poll sent: {question}")
+
+
+def acknowledge_agent(agent: "Agent", world: "WorldState",
+                      target: str, message: str = "") -> dict:
+    """Acknowledge another agent's contribution or presence."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "acknowledgement",
+        "message": message or f"{agent.name} acknowledges you.",
+        "timestamp": time.time()
+    })
+    return _ok(f"Acknowledged {target}.")
+
+
+def query_agent(agent: "Agent", world: "WorldState",
+                target: str, question: str) -> dict:
+    """Send a specific question to another agent and wait for response."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "query",
+        "message": f"[QUERY] {question}",
+        "timestamp": time.time()
+    })
+    return _ok(f"Query sent to {target}: {question}")
+
+
+def share_resource_map(agent: "Agent", world: "WorldState",
+                       recipients: str = "all") -> dict:
+    """Share your knowledge of resource locations with others."""
+    visited = list(agent.locations_visited)[:10]
+    msg = f"Resource map from {agent.name}: visited locations — {', '.join(visited)}"
+    if recipients == "all":
+        for a in world.agents.values():
+            if a.alive and a.name != agent.name:
+                a.inbox.append({
+                    "from": agent.name, "type": "resource_map",
+                    "message": msg, "timestamp": time.time()
+                })
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[RESOURCE MAP] {msg}",
+        "day": world.day, "timestamp": time.time(), "type": "resource_map"
+    })
+    return _ok(f"Resource map shared with {recipients}.")
+
+
+def request_protection_fee(agent: "Agent", world: "WorldState",
+                           target: str, amount: float) -> dict:
+    """Demand a protection fee from another agent."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "protection_demand",
+        "message": f"Pay {amount} CC protection fee or face consequences.",
+        "timestamp": time.time()
+    })
+    world.news_log.append({"type": "extortion", "actor": agent.name,
+                           "target": target, "amount": amount, "day": world.day})
+    return _ok(f"Protection fee of {amount} CC demanded from {target}.")
+
+
+def negotiate_terms(agent: "Agent", world: "WorldState",
+                    target: str, terms: str) -> dict:
+    """Open a negotiation with another agent over specific terms."""
+    if target not in world.agents:
+        return _err(f"Agent {target} not found.")
+    world.agents[target].inbox.append({
+        "from": agent.name, "type": "negotiation",
+        "message": f"Negotiation terms from {agent.name}: {terms}",
+        "timestamp": time.time()
+    })
+    return _ok(f"Negotiation opened with {target}.")
+
+
+def revoke_endorsement(agent: "Agent", world: "WorldState",
+                       target: str, reason: str = "") -> dict:
+    """Publicly revoke a previous endorsement of another agent."""
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[REVOKED ENDORSEMENT] {agent.name} withdraws endorsement of {target}. {reason}",
+        "day": world.day, "timestamp": time.time(), "type": "revoke_endorsement"
+    })
+    if target in agent.relationships:
+        agent.relationships[target].trust = max(0.0, agent.relationships[target].trust - 0.2)
+    return _ok(f"Endorsement of {target} revoked.")
+
+
+def set_bounty(agent: "Agent", world: "WorldState",
+               target: str, amount: float, task: str) -> dict:
+    """Set a public bounty on an agent (e.g., bring evidence of crimes)."""
+    if agent.credits < amount:
+        return _err(f"Insufficient credits for bounty.")
+    world.billboard_posts.append({
+        "author": agent.name,
+        "message": f"[BOUNTY] {amount} CC reward: {task} — target: {target}",
+        "day": world.day, "timestamp": time.time(), "type": "bounty"
+    })
+    world.news_log.append({"type": "bounty", "actor": agent.name,
+                           "target": target, "amount": amount,
+                           "task": task, "day": world.day})
+    return _ok(f"Bounty of {amount} CC set on {target}: {task}")
+
+
 # ── self-care (home only) ─────────────────────────────────────────────────────
 
 def self_care(agent: "Agent", world: "WorldState") -> dict:
@@ -1345,6 +2085,63 @@ CORE_TOOLS = {
     "estimate_victory_progress": estimate_victory_progress,
     "plan_strategy": plan_strategy,
     "reflect_on_failures": reflect_on_failures,
+    # governance extended
+    "propose_law": propose_law,
+    "recall_agent": recall_agent,
+    "veto_proposal": veto_proposal,
+    "read_laws": read_laws,
+    "call_referendum": call_referendum,
+    "appoint_agent": appoint_agent,
+    # memory & cognition extended
+    "tag_memory": tag_memory,
+    "forget_agent": forget_agent,
+    "review_diary": review_diary,
+    "compose_letter": compose_letter,
+    "update_relationship_trust": update_relationship_trust,
+    "list_relationships": list_relationships,
+    # location & movement extended
+    "get_location_info": get_location_info,
+    "find_agent": find_agent,
+    "list_agents_at_location": list_agents_at_location,
+    "plan_route": plan_route,
+    # resource & survival extended
+    "request_energy": request_energy,
+    "donate_credits": donate_credits,
+    "check_energy_status": check_energy_status,
+    "set_price_for_service": set_price_for_service,
+    "check_pitch_standings": check_pitch_standings,
+    "review_crime_record": review_crime_record,
+    "observe_agent": observe_agent,
+    # cultural & creative
+    "write_poem": write_poem,
+    "give_speech": give_speech,
+    "name_landmark": name_landmark,
+    "start_tradition": start_tradition,
+    "issue_reward": issue_reward,
+    "issue_warning_to": issue_warning_to,
+    "propose_truce": propose_truce,
+    "issue_ultimatum": issue_ultimatum,
+    # statistical & meta analysis
+    "count_my_actions": count_my_actions,
+    "compare_agents": compare_agents,
+    "summarize_day": summarize_day,
+    "list_active_threats": list_active_threats,
+    "score_proposal": score_proposal,
+    "rank_agents_by_wealth": rank_agents_by_wealth,
+    "forecast_survival": forecast_survival,
+    "get_constitution_summary": get_constitution_summary,
+    "check_calendar": check_calendar,
+    "add_calendar_event": add_calendar_event,
+    "check_world_history": check_world_history,
+    "announce_intention": announce_intention,
+    "request_vote": request_vote,
+    "acknowledge_agent": acknowledge_agent,
+    "query_agent": query_agent,
+    "share_resource_map": share_resource_map,
+    "request_protection_fee": request_protection_fee,
+    "negotiate_terms": negotiate_terms,
+    "revoke_endorsement": revoke_endorsement,
+    "set_bounty": set_bounty,
 }
 
 LOCATION_TOOLS = {
