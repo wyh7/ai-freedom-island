@@ -20,13 +20,6 @@ logs/
 # Results (large data, can re-generate)
 results/
 
-# Test/scratch worlds
-results/timing_test/
-results/prompt_test/
-results/final_test/
-results/quicktest/
-results/gemini_test*/
-
 # LaTeX build artifacts
 report/*.aux
 report/*.log
@@ -53,3 +46,6 @@ desktop.ini
 *.pdf
 figures/*.png
 figures/*.pdf
+
+# Internal project materials
+立项申请/
