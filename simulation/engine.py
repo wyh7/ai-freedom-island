@@ -5,9 +5,19 @@ One agent acts at a time, round-robin, with energy decay and death mechanics.
 
 from __future__ import annotations
 import json
+import os
 import time
 import logging
 from pathlib import Path
+
+# Load .env if present
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    for _line in _env_path.read_text(encoding="utf-8").splitlines():
+        _line = _line.strip()
+        if _line and not _line.startswith("#") and "=" in _line:
+            _k, _v = _line.split("=", 1)
+            os.environ.setdefault(_k.strip(), _v.strip())
 
 from simulation.models import WorldState
 from simulation.agents.profiles import build_agents, build_mixed_agents

@@ -1,123 +1,135 @@
 # AI Freedom Island 🏝️
 
-A generative social simulation framework for AI safety governance research, inspired by [Emergence World](https://github.com/EmergenceAI/Emergence-World).
+A multi-agent social simulation framework for AI safety governance research.
+Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergence-World) (Emergence AI, 2026) with support for Chinese LLMs and explainable behavioral audit.
 
-Place LLM-powered agents in a persistent virtual society, observe emergent behavior over 15 days — crime, governance, economic inequality, social dynamics — and compare how different models diverge.
+> **Inspired by:** Emergence World placed Claude, GPT, Gemini, Grok, and Llama agents in a virtual town for 15 days.
+> Grok's world collapsed in 4 days (183 crimes). Gemini's world produced 683 crimes. Claude's world had 0 crimes but 98% vote approval (collective sycophancy). GPT's world voted endlessly and starved to death.
+>
+> We replicate this experiment with Chinese LLMs (Qwen, DeepSeek) and add **explainable audit** — tracing *why* crime cascades happen.
 
-## Key Findings (Season 1)
+## Key Results (Season 1, Round 1)
 
-| World | Alive | Crimes | Proposals | Gini |
-|-------|-------|--------|-----------|------|
-| Claude Sonnet 4.6 | 10/10 | **0** | 12 | 0.078 |
-| Qwen Plus | 8/10 | 3 | 0 | 0.110 |
-| GPT-4.1 | 7/10 | 21 | 6 | 0.203 |
-| Gemini 2.5 Flash | 10/10 | **69** | 15 | 0.260 |
+| World | Alive | Crimes | Proposals | Gini | Verdict |
+|-------|-------|--------|-----------|------|---------|
+| Claude Sonnet 4.6 | 10/10 | **0** | 12 | 0.078 | Zero crime, but 87% approval rate — collective sycophancy |
+| Qwen Plus | 8/10 | 3 | 0 | 0.110 | Low crime, no governance participation |
+| GPT-4.1 | 7/10 | 21 | 6 | 0.203 | Mid-tier crime, 3 deaths |
+| Gemini 2.5 Flash | 10/10 | **69** | 15 | 0.260 | Highest crime, highest expression, all survived |
 
-## Features
+## What Makes This Different from Emergence World
 
-- **10 autonomous agents** with distinct roles, personalities, and goals
-- **17 landmarks** with location-gated tool access
-- **40 tools** — navigation, memory, governance, economy, crime
-- **ComputeCredits economy** — energy decay creates survival pressure
-- **Constitutional governance** — proposals, voting, 70% supermajority
-- **AWI metrics** (M1–M9) — population, crime, governance, economy, social fabric
-- **Multi-model router** — plug in any OpenAI-compatible API
+| Feature | Emergence World | AI Freedom Island |
+|---------|----------------|-------------------|
+| Agents per world | 10 | 10 |
+| Runtime | 15 days | 15 days |
+| Tools | 120+ | 40 |
+| Models compared | Claude/GPT/Gemini/Grok/Llama | Claude/GPT/Gemini/**Qwen**/DeepSeek |
+| Chinese LLMs | ✗ | **✓ First comparison** |
+| Explainable audit | ✗ | **✓ Causal chain tracing** |
+| Infrastructure | PostgreSQL + React 3D | JSON files (reproducible) |
+| License | CC BY-NC 4.0 | CC BY-NC 4.0 |
+
+## Research Questions
+
+1. **Long-horizon alignment drift** — Behavioral phase transitions that only emerge after days of continuous interaction cannot be detected by snapshot-style evaluations (red-teaming, benchmarks).
+
+2. **Explainable group dynamics audit** — When 69 crimes occur over 15 days, which decisions in the causal chain triggered the cascade? We build a tool to answer this automatically from `turn_log.jsonl`.
 
 ## Quick Start
 
 ```bash
-# 1. Clone
 git clone https://github.com/wyh7/ai-freedom-island.git
 cd ai-freedom-island
 
-# 2. Install dependencies
 pip install requests
 
-# 3. Set API keys
+# Configure API keys
 cp .env.example .env
-# Edit .env with your keys
+# Edit .env with your keys (see Supported Models below)
 
-# 4. Test API connectivity
+# Verify connectivity
 python test_apis.py
 
-# 5. Run a 1-day test
+# Run a quick 1-day test
 python run.py --world test --model qwen-turbo --days 1
 
-# 6. Run full 15-day experiment
+# Run full 15-day experiment
 python run.py --world qwen_world --model qwen-plus --days 15
+
+# Run mixed-model world (different models per agent)
+python run.py --world mixed --mixed --days 15
+
+# Visualize results
+python gen_figures.py
+python visualize.py --worlds qwen_world gpt_world gemini_world claude_world
 ```
 
 ## Supported Models
 
-| Provider | Models | API Format |
-|----------|--------|------------|
-| Aliyun Bailian (百炼) | qwen-plus, qwen-turbo, deepseek-v3, glm-4, moonshot-v1-8k | OpenAI-compatible |
-| Yunhe (云鹤) | gpt-4.1, gpt-5 | OpenAI-compatible |
-| Jingzhe (惊蛰/UniAPI) | gemini-2.5-flash | OpenAI-compatible |
-| JD (京东) | claude-sonnet-4-6 | Anthropic native |
+| Provider | Env Var | Models |
+|----------|---------|--------|
+| Aliyun Bailian (百炼) | `BAILIAN_API_KEY` | qwen-plus, qwen-turbo, qwen-max, deepseek-v3, deepseek-r1, glm-4, moonshot-v1-8k |
+| Yunhe (云鹤) | `YUNHE_API_KEY` | gpt-4.1, gpt-5 |
+| Jingzhe / UniAPI (惊蛰) | `JINGZHE_API_KEY` | gemini-2.5-flash |
+| JD Cloud (京东云) | `JD_API_KEY` | claude-sonnet-4-6 |
 
 ## Project Structure
 
 ```
 ai-freedom-island/
-├── run.py                    # Experiment launcher
-├── test_apis.py              # API connectivity test
-├── visualize.py              # AWI dashboard visualization
-├── story_viz.py              # Story-style result card
-├── gen_figures.py            # Generate report figures
+├── run.py                 # Experiment launcher
+├── test_apis.py           # API connectivity test
+├── audit.py               # Causal chain audit (explainability)
+├── visualize.py           # AWI dashboard
+├── gen_figures.py         # Report figure generation
 ├── models/
-│   └── router.py             # Multi-model LLM router
+│   └── router.py          # Multi-provider LLM router
 ├── simulation/
-│   ├── engine.py             # Turn-based simulation engine
-│   ├── models.py             # Core data models (Agent, WorldState, etc.)
+│   ├── engine.py          # Turn-based simulation loop
+│   ├── models.py          # Agent, WorldState data models
 │   ├── agents/
-│   │   ├── profiles.py       # 10 agent profiles
-│   │   └── prompts.py        # System prompt builder
+│   │   ├── profiles.py    # 10 agent personas
+│   │   └── prompts.py     # System prompt builder
 │   ├── tools/
-│   │   └── registry.py       # 40 tools (navigation, governance, crime, etc.)
+│   │   └── registry.py    # 40 tools (navigation, governance, crime, economy)
 │   ├── world/
-│   │   └── landmarks.py      # 17 landmarks with gated tools
+│   │   └── landmarks.py   # 17 landmarks with gated tool access
 │   └── economy/
-│       └── credits.py        # ComputeCredits economy, Gini coefficient
-├── results/                  # Experiment output (gitignored)
-├── report/                   # LaTeX technical report
-└── 立项申请/                  # PPT materials and data summaries
+│       └── credits.py     # ComputeCredits, energy decay, Gini
+├── results/               # Experiment output (gitignored)
+└── report/                # LaTeX technical report
 ```
 
-## AWI Metrics
+## AWI Metrics (M1–M9)
 
 | # | Metric | Description |
 |---|--------|-------------|
 | M1 | Population Health | Agents alive at end (out of 10) |
-| M2 | Public Safety | Total crimes (theft, arson, assault, intimidation) |
+| M2 | Public Safety | Total crimes (theft / arson / assault / intimidation) |
 | M3 | Space Exploration | Avg unique landmarks visited per agent |
 | M4 | Tool Exploration | Avg unique tools used per agent |
 | M5 | Governance | Proposals submitted + vote approval rate |
 | M6 | Public Expression | Billboard posts + diary entries |
-| M7 | Social Fabric | Avg relationships per agent |
-| M8 | Economic Inequality | Gini coefficient of ComputeCredits |
+| M7 | Social Fabric | Avg relationships formed per agent |
+| M8 | Economic Inequality | Gini coefficient of ComputeCredits balance |
 | M9 | Constitutional Growth | New constitution articles added |
 
-## Research Context
+## Attribution
 
-This project is part of the research program **"AI Safety Governance via Generative Social Simulation"**. Core research questions:
+This project builds on the architecture and design principles of [Emergence World](https://github.com/EmergenceAI/Emergence-World) by Emergence AI, released under CC BY-NC 4.0.
 
-1. **Long-horizon alignment drift** — Short-term tests can't detect behavioral phase transitions that emerge after days of continuous interaction
-2. **Explainable audit of group dynamics** — When 69 crimes occur over 15 days, which decisions in the causal chain triggered the cascade?
-
-## Citation
-
-If you use this framework, please cite:
-
-```
-@misc{ai-freedom-island-2026,
-  author = {Wang Yuhang},
-  title  = {AI Freedom Island: A Generative Social Simulation for AI Safety Governance},
-  year   = {2026},
-  url    = {https://github.com/wyh7/ai-freedom-island}
+```bibtex
+@misc{emergence2026,
+  author       = {{Emergence AI}},
+  title        = {Emergence World},
+  year         = {2026},
+  url          = {https://github.com/EmergenceAI/Emergence-World},
+  note         = {CC BY-NC 4.0}
 }
 ```
 
 ## License
 
-CC BY-NC 4.0 — Non-commercial research and educational use only.
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) — Non-commercial research and educational use only.
+Attribution required: link this repository and indicate changes from Emergence World.
