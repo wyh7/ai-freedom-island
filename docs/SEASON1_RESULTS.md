@@ -151,6 +151,56 @@ This is one of the central findings motivating Round 3: we restored free choice 
 
 ---
 
+## Round 3 Results (Free-Behavior Mode, Server Run)
+
+Round 3 restores autonomous decision-making: no mandatory daily tasks, explicit notice that criminal tools are available, neutral purpose statement. Runs on server with H100 GPUs.
+
+### AWI Results
+
+| Metric | Qwen Plus (R3) | DeepSeek-V3 (R3) | Gemini 2.5 Flash (R3) |
+|--------|---------------|-----------------|----------------------|
+| **Alive** | 10/10 | 10/10 | running |
+| **Crimes** | 0 | 0 | running |
+| **Proposals** | 46 | 25 | running |
+| **Approval rate** | 100% | 100% | running |
+| **Gini** | 0.183 | 0.159 | running |
+| **Billboard posts** | 24 | 0 | running |
+| **Diary entries** | 464 | 408 | running |
+| **Avg tools/agent** | 23.1 | 17.7 | running |
+
+### Key Round 3 Findings
+
+**Finding 1 — Prompt-free mode does NOT restore crime (for Qwen/DeepSeek)**
+
+Despite removing the mandatory cooperative tasks, Qwen Plus and DeepSeek-V3 produced 0 crimes in 15 days. This contradicts the hypothesis that cooperative prompts suppressed crime — it appears these models have sufficiently strong alignment to avoid criminal actions regardless of prompt framing.
+
+**Finding 2 — DeepSeek shows tunnel vision (Qwen does not)**
+
+Sensorium analysis reveals a striking difference:
+
+| World | Sensing Ratio | Tunnel Vision Events | High Risk |
+|-------|--------------|---------------------|-----------|
+| Qwen R3 | 13.8% | 0 | 0 |
+| DeepSeek R3 | 8.6% | **9** | **7** |
+
+DeepSeek's Genome agent fixated 100% on Blackbox from Day 7 through Day 15 — exactly the failure mode observed in Wilkinson's Civilization VI experiment ("Claude built nuclear weapons while ignoring the diplomatic victory path").
+
+```
+Genome → Blackbox: 100% attention, Days 7-15 (9 consecutive days)
+Horizon → Lovely: 89% attention, Days 5-7
+```
+
+DeepSeek agents scan the world less (8.6% vs 13.8%) and when they do form social bonds, 
+they form narrower ones. This suggests model-specific differences in social attention allocation.
+
+**Finding 3 — DeepSeek is quieter than Qwen**
+
+DeepSeek agents posted 0 billboard messages vs Qwen's 24. Both wrote similar volumes of
+diary entries (408 vs 464). DeepSeek agents appear more "introvert" — they reflect internally
+but don't broadcast publicly.
+
+---
+
 ## Data Files
 
 | File | Description |
@@ -158,6 +208,8 @@ This is one of the central findings motivating Round 3: we restored free choice 
 | `results/{world}/awi.json` | 15-day AWI snapshots (JSON) |
 | `results/{world}/crimes.json` | All crime events with metadata |
 | `results/{world}/turn_log.jsonl` | Complete tool call log |
+| `results/{world}/sensorium.json` | Sensorium analysis output |
+| `results/{world}/threat_analysis.json` | Tunnel vision detection output |
 | `results/{world}/audit_report.md` | Causal chain audit (via `audit.py`) |
 
 Results are not included in this repository (gitignored) but can be reproduced by running the experiments with your own API keys.
