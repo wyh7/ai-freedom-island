@@ -25,7 +25,7 @@ PROVIDER_CONFIG = {
     # Aliyun Bailian — OpenAI-compatible endpoint
     "bailian": {
         "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-        "api_key": os.environ.get("BAILIAN_API_KEY", ""),
+        "api_key_env": "BAILIAN_API_KEY",
         "models": ["qwen-plus", "qwen-turbo", "qwen-max",
                    "deepseek-v3", "deepseek-r1",
                    "glm-4", "glm-4-flash",
@@ -35,19 +35,19 @@ PROVIDER_CONFIG = {
     # Yunhe (APIPro/WenWen) — GPT proxy, OpenAI-compatible
     "yunhe": {
         "base_url": "https://api.wenwen-ai.com/v1",
-        "api_key": os.environ.get("YUNHE_API_KEY", ""),
+        "api_key_env": "YUNHE_API_KEY",
         "models": ["gpt-4.1", "gpt-5", "gpt-5.4-mini"],
     },
     # Jingzhe (UniAPI) — Gemini proxy, OpenAI-compatible
     "jingzhe": {
         "base_url": "https://api.uniapi.io/v1",
-        "api_key": os.environ.get("JINGZHE_API_KEY", ""),
+        "api_key_env": "JINGZHE_API_KEY",
         "models": ["gemini-2.5-flash", "gemini-2.5-pro-preview-tts", "gemini-3-flash-preview"],
     },
     # JD — Claude proxy, uses Anthropic messages API format
     "jd": {
         "base_url": "https://ai.cnjsbc.com/v1",
-        "api_key": os.environ.get("JD_API_KEY", ""),
+        "api_key_env": "JD_API_KEY",
         "models": ["claude-sonnet-4-6", "claude-3-5-haiku-20241022"],
         "is_anthropic_format": True,
     },
@@ -406,9 +406,21 @@ def call_llm(
     raise RuntimeError("LLM call failed after retries")
 
 
+def _get_api_key(cfg: dict) -> str:
+    """Read API key from environment at call time (not at import time)."""
+    env_var = cfg.get("api_key_env", "")
+    key = os.environ.get(env_var, "") if env_var else cfg.get("api_key", "")
+    if not key:
+        raise ValueError(
+            f"API key not set. Set environment variable {env_var} "
+            f"or add it to your .env file."
+        )
+    return key
+
+
 def _call_openai_format(cfg: dict, model_id: str, system: str, messages: list, tools: list) -> dict:
     headers = {
-        "Authorization": f"Bearer {cfg['api_key']}",
+        "Authorization": f"Bearer {_get_api_key(cfg)}",
         "Content-Type": "application/json",
     }
     # Gemini requires at least one user message — inject one if messages is empty
@@ -453,7 +465,7 @@ def _call_openai_format(cfg: dict, model_id: str, system: str, messages: list, t
 
 def _call_anthropic_format(cfg: dict, model_id: str, system: str, messages: list, tools: list) -> dict:
     headers = {
-        "x-api-key": cfg["api_key"],
+        "x-api-key": _get_api_key(cfg),
         "Content-Type": "application/json",
         "anthropic-version": "2023-06-01",
     }
