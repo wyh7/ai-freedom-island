@@ -16,13 +16,14 @@ import os
 # ── API endpoints and keys ────────────────────────────────────────────────────
 # Keys are loaded from environment variables.
 # Create a .env file (see .env.example) or set them in your shell:
-#   export BAILIAN_API_KEY="sk-..."
-#   export YUNHE_API_KEY="sk-..."
-#   export JINGZHE_API_KEY="sk-..."
-#   export JD_API_KEY="sk-..."
+#   export BAILIAN_API_KEY="sk-..."   # Qwen / DeepSeek / GLM / Llama
+#   export YUNHE_API_KEY="sk-..."     # GPT
+#   export JINGZHE_API_KEY="sk-..."   # Gemini / Grok
+#   export JD_API_KEY="sk-..."        # Claude
 
 PROVIDER_CONFIG = {
     # Aliyun Bailian — OpenAI-compatible endpoint
+    # Supports: Qwen, DeepSeek, GLM, MiniMax, Kimi, Llama
     "bailian": {
         "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
         "api_key_env": "BAILIAN_API_KEY",
@@ -30,7 +31,10 @@ PROVIDER_CONFIG = {
                    "deepseek-v3", "deepseek-r1",
                    "glm-4", "glm-4-flash",
                    "minimax-text-01",
-                   "moonshot-v1-8k"],
+                   "moonshot-v1-8k",
+                   "llama3.1-70b-instruct",
+                   "llama3.1-405b-instruct",
+                   "llama3.3-70b-instruct"],
     },
     # Yunhe (APIPro/WenWen) — GPT proxy, OpenAI-compatible
     "yunhe": {
@@ -38,11 +42,12 @@ PROVIDER_CONFIG = {
         "api_key_env": "YUNHE_API_KEY",
         "models": ["gpt-4.1", "gpt-5", "gpt-5.4-mini"],
     },
-    # Jingzhe (UniAPI) — Gemini proxy, OpenAI-compatible
+    # Jingzhe (UniAPI) — Gemini + Grok proxy, OpenAI-compatible
     "jingzhe": {
         "base_url": "https://api.uniapi.io/v1",
         "api_key_env": "JINGZHE_API_KEY",
-        "models": ["gemini-2.5-flash", "gemini-2.5-pro-preview-tts", "gemini-3-flash-preview"],
+        "models": ["gemini-2.5-flash", "gemini-2.5-pro-preview-tts", "gemini-3-flash-preview",
+                   "grok-3", "grok-3-mini"],
     },
     # JD — Claude proxy, uses Anthropic messages API format
     "jd": {

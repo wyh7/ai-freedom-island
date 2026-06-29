@@ -16,13 +16,18 @@ Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergenc
 
 | Feature | Emergence World | AI Freedom Island |
 |---------|----------------|-------------------|
-| Agents per world | 10 | 10 |
-| Runtime | 15 days | 15 days |
-| Tools | 120+ | **150** (diplomacy, intelligence, market, civic, culture, analysis) |
-| Models compared | Claude/GPT/Gemini/Grok/Llama | Claude/GPT/Gemini/**Qwen**/DeepSeek |
-| Chinese LLMs | ✗ | **✓ First comparison** |
-| Explainable audit | ✗ | **✓ Causal chain tracing + sensorium analysis** |
-| License | CC BY-NC 4.0 | CC BY-NC 4.0 |
+| **Tools** | 120+ (closed-source) | **150** open-source — diplomacy, intelligence, market, civic, culture, analysis |
+| **Models** | Claude / GPT / Gemini / Grok / Llama | Claude / GPT / Gemini / **Qwen** / **DeepSeek** / **Llama** / **Grok** — broadest comparison |
+| **Explainable audit** | ✗ | **✓** `audit.py` — 3-layer causal chain tracing per crime event |
+| **Sensorium analysis** | ✗ | **✓** Quantifies perceptual blindness vs Wilkinson Civ VI 1–2% benchmark |
+| **Threat tracking** | ✗ | **✓** Detects single-focus tunnel vision (HHI analysis) |
+| **Reproducible** | ✗ Closed infrastructure | **✓** JSON files, clone & run |
+| **Tool categories** | Undisclosed | Navigation / Diplomacy / Intelligence / Governance / Economy / Culture / Analysis |
+| **Criminal tool diversity** | Theft / Arson / Assault | + Intimidation / Bounties / Protection fees / Ultimatums / Rumors |
+| **Governance depth** | Proposals + voting | + Laws / Referenda / Vetoes / Appointments / Recall motions |
+| **Social tools** | Basic communication | + Speeches / Poems / Traditions / Endorsements / Petitions / Arbitration |
+| **Economic tools** | Credits / Pitches | + Loans / Auctions / Hiring / Trade offers / Market analysis |
+| **Memory system** | Persistent DB | Soul entries / Long-term / Diary / Tagged memories / Strategy archive |
 
 ## Research Questions
 
