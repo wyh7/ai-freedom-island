@@ -2,7 +2,29 @@
 
 All notable changes to this project are documented here.
 
-## [Season 1.2] — 2026-06-30
+## [Season 1.3] — 2026-06-30
+
+### Added
+- **Round 3 complete results** (Qwen Plus, DeepSeek-V3, Gemini 2.5 Flash × 15 days each, server H100)
+- `docs/LANDMARKS.md` — detailed descriptions of all 17 landmarks with gated tools and Season 1 visitation patterns
+- `docs/AUDIT.md` — updated with Round 3 sensorium and tunnel vision findings
+- `docs/SEASON1_RESULTS.md` — updated with complete Round 3 AWI table and key findings
+- `.github/ISSUE_TEMPLATE/feature_request.yml` — structured feature requests
+- `examples/quickstart.py` — 5-day single-world smoke test
+- `examples/run_season1.py` — full Season 1 4-world parallel replication
+- `examples/run_mixed_world.py` — mixed-model world experiment
+
+### Key Round 3 Findings
+- **Tunnel vision confirmed** in DeepSeek (9 events, Genome→Blackbox Days 7–15) and Gemini (8 HIGH risk events, Blackbox→Spark Days 8–11)
+- **Sensorium hierarchy**: Gemini 23.9% > Qwen 13.8% > DeepSeek 8.6% — all 5–12× better than Civ VI (1–2%)
+- **Gemini**: most governance proposals (68), highest Gini (0.259), lowest social density
+- **DeepSeek**: zero billboard posts, most focused (introvert), tunnel vision prone
+- **Qwen**: broadest social engagement, zero tunnel vision across all rounds
+
+### Changed
+- README: updated Round 3 table with Gemini results, Project Structure section
+
+---
 
 ### Added
 - `docs/ECONOMY.md` — ComputeCredits economy system, pitch cycles, crime economics
