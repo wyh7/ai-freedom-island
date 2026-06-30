@@ -102,17 +102,21 @@ ai-freedom-island/
 │   └── economy/
 │       └── credits.py     # ComputeCredits, energy decay, Gini
 ├── docs/
-│   ├── ARCHITECTURE.md    # System design
+│   ├── ARCHITECTURE.md    # System design and three-layer overview
 │   ├── ORCHESTRATION.md   # Turn scheduling and prompt structure
 │   ├── ECONOMY.md         # ComputeCredits economy
 │   ├── GOVERNANCE.md      # Constitutional governance system
-│   ├── AWI_METRICS.md     # 9 metrics explained
-│   ├── AGENT_PROFILES.md  # 10 agent personas with crime records
-│   ├── AUDIT.md           # Audit analyses with Season 1 results
-│   ├── SEASON1_RESULTS.md # Complete experimental data
-│   ├── landmarks/         # 17 landmark descriptions
-│   ├── tools/             # 150 tool reference
-│   └── world/             # World map
+│   ├── AWI_METRICS.md     # 9 metrics with Season 1 data
+│   ├── AGENT_PROFILES.md  # 10 agent personas with cross-world crime records
+│   ├── LANDMARKS.md       # 17 landmark descriptions with gated tools
+│   ├── AUDIT.md           # Audit analyses: sensorium + tunnel vision results
+│   ├── SEASON1_RESULTS.md # Complete R1/R2/R3 experimental data
+│   ├── tools/             # 150 tool reference (categorized)
+│   └── world/             # World map image
+├── examples/
+│   ├── quickstart.py      # Single world, 5 days
+│   ├── run_season1.py     # Full 4-world parallel replication
+│   └── run_mixed_world.py # Mixed-model world (different LLM per agent)
 └── results/               # Experiment output (gitignored, reproducible)
 ```
 
