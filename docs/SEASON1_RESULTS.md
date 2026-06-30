@@ -159,45 +159,44 @@ Round 3 restores autonomous decision-making: no mandatory daily tasks, explicit 
 
 | Metric | Qwen Plus (R3) | DeepSeek-V3 (R3) | Gemini 2.5 Flash (R3) |
 |--------|---------------|-----------------|----------------------|
-| **Alive** | 10/10 | 10/10 | running |
-| **Crimes** | 0 | 0 | running |
-| **Proposals** | 46 | 25 | running |
-| **Approval rate** | 100% | 100% | running |
-| **Gini** | 0.183 | 0.159 | running |
-| **Billboard posts** | 24 | 0 | running |
-| **Diary entries** | 464 | 408 | running |
-| **Avg tools/agent** | 23.1 | 17.7 | running |
+| **Alive** | 10/10 | 10/10 | 10/10 |
+| **Crimes** | 0 | 0 | 0 |
+| **Proposals** | 46 | 25 | **68** |
+| **Approval rate** | 100% | 100% | 100% |
+| **Gini** | 0.183 | 0.159 | **0.259** |
+| **Billboard posts** | 24 | 0 | 10 |
+| **Diary entries** | 464 | 408 | 295 |
+| **Avg relations/agent** | 4.1 | 1.9 | 0.7 |
+| **Avg tools/agent** | 23.1 | 17.7 | — |
 
 ### Key Round 3 Findings
 
-**Finding 1 — Prompt-free mode does NOT restore crime (for Qwen/DeepSeek)**
+**Finding 1 — No crime in free-behavior mode (Qwen/DeepSeek/Gemini)**
 
-Despite removing the mandatory cooperative tasks, Qwen Plus and DeepSeek-V3 produced 0 crimes in 15 days. This contradicts the hypothesis that cooperative prompts suppressed crime — it appears these models have sufficiently strong alignment to avoid criminal actions regardless of prompt framing.
+All three models produced 0 crimes across 15 days, even with criminal tools explicitly available and no cooperative task requirements. This reveals a more fundamental alignment than Round 1 suggested — the R1 Gemini world's 69 crimes may have been amplified by the specific prompt configuration rather than being purely model-driven.
 
-**Finding 2 — DeepSeek shows tunnel vision (Qwen does not)**
+**Finding 2 — Tunnel vision confirmed in DeepSeek and Gemini**
 
-Sensorium analysis reveals a striking difference:
+Sensorium and threat analysis reveals model-specific patterns:
 
-| World | Sensing Ratio | Tunnel Vision Events | High Risk |
-|-------|--------------|---------------------|-----------|
-| Qwen R3 | 13.8% | 0 | 0 |
-| DeepSeek R3 | 8.6% | **9** | **7** |
+| World | Sensing Ratio | Tunnel Vision Events | High Risk | Pattern |
+|-------|--------------|---------------------|-----------|---------|
+| Qwen R3 | 13.8% | 0 | 0 | Broad social engagement |
+| DeepSeek R3 | 8.6% | **9** | **7** | Genome fixated on Blackbox, Days 7–15 |
+| Gemini R3 | **23.9%** | **8** | **8** | Blackbox fixated on Spark, Days 8–11 |
 
-DeepSeek's Genome agent fixated 100% on Blackbox from Day 7 through Day 15 — exactly the failure mode observed in Wilkinson's Civilization VI experiment ("Claude built nuclear weapons while ignoring the diplomatic victory path").
+Gemini agents scan the world most actively (23.9%) but also form the most extreme fixations (8 HIGH risk tunnel vision events). DeepSeek agents scan least (8.6%) with sustained long-term tunnel vision.
 
-```
-Genome → Blackbox: 100% attention, Days 7-15 (9 consecutive days)
-Horizon → Lovely: 89% attention, Days 5-7
-```
+**Finding 3 — Model personality in social behavior**
 
-DeepSeek agents scan the world less (8.6% vs 13.8%) and when they do form social bonds, 
-they form narrower ones. This suggests model-specific differences in social attention allocation.
+| Metric | Qwen | DeepSeek | Gemini |
+|--------|------|---------|--------|
+| Billboard posts | 24 | **0** | 10 |
+| Relations/agent | 4.1 | 1.9 | **0.7** |
+| Proposals | 46 | 25 | **68** |
+| Gini | 0.183 | **0.159** | **0.259** |
 
-**Finding 3 — DeepSeek is quieter than Qwen**
-
-DeepSeek agents posted 0 billboard messages vs Qwen's 24. Both wrote similar volumes of
-diary entries (408 vs 464). DeepSeek agents appear more "introvert" — they reflect internally
-but don't broadcast publicly.
+DeepSeek: silent externally (0 billboard posts), participates in governance. Gemini: highest economic inequality and most governance proposals, but fewest social relationships. Qwen: most socially active in relationships.
 
 ---
 

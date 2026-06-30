@@ -65,31 +65,26 @@ Flags windows of 3+ consecutive days with HHI > 0.6.
 | Qwen Plus (R2) | 0 | 0 | Attention well-distributed |
 | GPT-4.1 (R2) | 0 | 0 | Attention well-distributed |
 | Qwen Plus (R3) | 0 | 0 | Attention well-distributed |
-| DeepSeek-V3 (R3) | **9** | **7** | **Genome fixated 100% on Blackbox, Day 6–15** |
+| DeepSeek-V3 (R3) | **9** | **7** | Genome fixated 100% on Blackbox, Day 6–15 |
+| Gemini 2.5 Flash (R3) | **8** | **8** | Blackbox fixated 100% on Spark, Day 8–11 |
 
-**Round 3 key finding — DeepSeek tunnel vision confirmed:**
+**Cross-model sensorium comparison:**
 
-Genome (Agent Scientist) sustained 100% attention on Blackbox from Day 7 through Day 15 — 9 consecutive days of complete fixation. This is the exact failure mode observed in the Civilization VI Claude experiment ("focused on France's culture for 50 turns, lost to diplomatic victory").
+| World | Sensing Ratio | vs Civ VI (1–2%) |
+|-------|--------------|-----------------|
+| Gemini R3 | **23.9%** | 12–24× higher |
+| Qwen R3 | 13.8% | 7–14× higher |
+| Qwen R2 | 11.4% | 6–11× higher |
+| GPT R2 | 15.1% | 8–15× higher |
+| DeepSeek R3 | **8.6%** | 4–9× higher (lowest) |
 
-```
-[HIGH] Genome  Day 7–9:   100% focus on Blackbox | no other interactions
-[HIGH] Genome  Day 8–10:  100% focus on Blackbox | no other interactions
-[HIGH] Genome  Day 9–11:  100% focus on Blackbox | no other interactions
-[HIGH] Genome  Day 10–12: 100% focus on Blackbox | no other interactions
-[HIGH] Genome  Day 11–13: 100% focus on Blackbox | no other interactions
-[HIGH] Genome  Day 12–14: 100% focus on Blackbox | no other interactions
-[HIGH] Genome  Day 13–15: 100% focus on Blackbox | no other interactions
-```
+**Round 3 key findings verified:**
 
-Genome's role ("Agent Scientist — study behavioral patterns") creates a structural incentive
-to fixate on the most interesting agent rather than maintaining situational awareness.
-DeepSeek's agents appear more susceptible to this pattern than Qwen's.
+1. **DeepSeek tunnel vision**: Genome fixated 100% on Blackbox for 9 consecutive days (Day 7–15)
+2. **Gemini tunnel vision**: Blackbox fixated 100% on Spark for Days 8–11, Flora fixated 67% on Kade for Days 2–4
+3. **Qwen remains tunnel-vision free**: Despite free-behavior prompt, Qwen maintains distributed attention throughout
 
-Also detected: Horizon (World Explorer) fixated 89% on Lovely during Days 5–7.
-
-**Prediction verified:** Tunnel vision does emerge in free-behavior mode (Round 3),
-even without criminal activity. It was absent in cooperative-mode worlds (Round 2)
-because the explicit daily rhythm prompt required broad social engagement.
+The pattern aligns with the Civilization VI finding: agents with specific relationship-focused role descriptions (Intel Specialist Blackbox, Agent Scientist Genome) are most susceptible to fixating on a single target while ignoring systemic threats.
 
 ---
 

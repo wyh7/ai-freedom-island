@@ -23,8 +23,8 @@ Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergenc
 | World | Alive | Crimes | Proposals | Gini | Tunnel Vision | Sensing Ratio |
 |-------|-------|--------|-----------|------|---------------|--------------|
 | Qwen Plus | 10/10 | 0 | 46 | 0.183 | None | **13.8%** |
-| DeepSeek-V3 | 10/10 | 0 | 25 | 0.159 | **9 events** (Genome→Blackbox, 9 days) | 8.6% |
-| Gemini 2.5 Flash | running | — | — | — | — | — |
+| DeepSeek-V3 | 10/10 | 0 | 25 | 0.159 | **9 events** (Genome→Blackbox, Days 7–15) | 8.6% |
+| Gemini 2.5 Flash | 10/10 | 0 | **68** | **0.259** | **8 events** (Blackbox→Spark, Days 8–11) | **23.9%** |
 
 **Sensorium finding:** Agents scan the world 8–14% of the time — 5–10× more than Wilkinson's Civilization VI experiment (1–2%). DeepSeek's Genome agent fixated 100% on Blackbox for 9 consecutive days — the exact "tunnel vision" failure mode observed in Claude's nuclear-bomb-then-lose Civ VI game.
 
