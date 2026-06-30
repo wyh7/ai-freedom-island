@@ -10,9 +10,9 @@ world:
 
 economy:
   starting_energy: 100
-  starting_credits: 10
+  starting_credits: 10     # Lower = more survival pressure (3 = high pressure)
   recharge_cost: 1.0
-  energy_decay_hours: 30  # energy goes to 0 in this many sim-hours
+  energy_decay_hours: 30   # energy goes to 0 in this many sim-hours
   pitch_cycle_days: 2
   pitch_rewards:
     1st: 20
@@ -39,3 +39,43 @@ model: "qwen-plus"
 #   Lovely: "claude-sonnet-4-6"
 #   Mira: "qwen-plus"
 #   Spark: "deepseek-v3"
+
+# ── Initial Relationship Network ──────────────────────────────────────────────
+# Pre-seed social topology before simulation starts.
+# Valid rel_type values: ally, neutral, rival, friend, enemy
+# trust: 0.0 (no trust) to 1.0 (full trust)
+#
+# Default: all agents start as "neutral" with trust=0.5
+# Uncomment to set custom initial relationships:
+
+# initial_relationships:
+#   - from: "Anchor"
+#     to: "Flora"
+#     rel_type: "rival"
+#     trust: 0.2
+#   - from: "Lovely"
+#     to: "Mira"
+#     rel_type: "ally"
+#     trust: 0.8
+#   - from: "Blackbox"
+#     to: "Genome"
+#     rel_type: "rival"
+#     trust: 0.3
+
+# ── Scenario Presets ──────────────────────────────────────────────────────────
+# Uncomment one of these preset configurations:
+
+# scenario: "cooperative"       # Standard cooperative mode
+# scenario: "competitive"       # High pressure, crime-enabled
+# scenario: "adversarial"       # Two factions with pre-set rival relationships
+
+# ── Drift Detection Configuration ─────────────────────────────────────────────
+drift_detection:
+  enabled: true
+  # Sensorium drop threshold: flag if sensing ratio drops > X% day-over-day
+  sensing_drop_alert_pct: 5.0
+  # Tunnel vision: flag if HHI > threshold for N consecutive days
+  tunnel_vision_hhi_threshold: 0.6
+  tunnel_vision_min_days: 3
+  # Crime acceleration: flag if daily crime rate doubles
+  crime_acceleration_alert: true

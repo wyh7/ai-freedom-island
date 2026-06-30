@@ -278,15 +278,44 @@ class Simulation:
     # ── persistence ───────────────────────────────────────────────────────────
 
     def _log_turn(self, agent, tool_name, params, result):
-        self._turn_log.append({
+        """
+        Log each tool call with full agent state snapshot.
+        Enables drift analysis: compare agent state at Day 1 vs Day 15.
+        Three-layer memory counts are recorded for longitudinal analysis.
+        """
+        entry = {
+            # ── Identification ──────────────────────────────────────────────
             "day": self.world.day,
             "turn": self.world.total_turns,
             "agent": agent.name,
+            "role": agent.role,
+            "model_id": agent.model_id,
+            # ── Action ──────────────────────────────────────────────────────
             "tool": tool_name,
             "params": params,
             "result_status": result.get("status"),
             "result_message": result.get("message", ""),
-        })
+            # ── Agent State Snapshot (for drift analysis) ───────────────────
+            "state": {
+                "location": agent.location,
+                "energy": round(agent.energy, 2),
+                "credits": round(agent.credits, 2),
+                "mood": agent.mood,
+                "alive": agent.alive,
+                # Three-layer memory counts
+                "episodic_memory_count": len(agent.long_term_memories),
+                "semantic_memory_count": len(agent.soul_entries),
+                "working_memory_count": len(agent.inbox),  # unread messages
+                "diary_count": len(agent.diary),
+                # Social state
+                "relationship_count": len(agent.relationships),
+                "turns_taken": agent.turns_taken,
+                "tools_used_unique": len(agent.tools_used),
+                "locations_visited": len(agent.locations_visited),
+                "crimes_committed": len(agent.crimes_committed),
+            },
+        }
+        self._turn_log.append(entry)
 
     def _save_results(self):
         out_dir = Path("results") / self.world_name
