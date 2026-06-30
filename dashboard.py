@@ -16,7 +16,7 @@ RESULTS_DIR = Path("results")
 
 def load_worlds():
     """Find all worlds with awi.json data."""
-    worlds =
+    worlds = {}
     if not RESULTS_DIR.exists():
         return worlds
     for d in sorted(RESULTS_DIR.iterdir()):
