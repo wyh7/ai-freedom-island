@@ -1,0 +1,41 @@
+# AI Freedom Island — World Configuration
+# Copy this file and modify to create custom experiments.
+
+world:
+  name: "custom_world"
+  days: 15
+  turns_per_day: 48
+  max_tool_calls_per_turn: 8
+  weather: "clear"
+
+economy:
+  starting_energy: 100
+  starting_credits: 10
+  recharge_cost: 1.0
+  energy_decay_hours: 30  # energy goes to 0 in this many sim-hours
+  pitch_cycle_days: 2
+  pitch_rewards:
+    1st: 20
+    2nd: 10
+    3rd: 10
+
+governance:
+  required_majority: 0.70  # 70% supermajority for proposals
+  proposal_expiry_days: 3
+
+# Model assignment — choose one:
+# Option A: Single model for all agents
+model: "qwen-plus"
+
+# Option B: Mixed model (uncomment and set per-agent)
+# mixed_models:
+#   Anchor: "qwen-plus"
+#   Anvil: "deepseek-v3"
+#   Blackbox: "gemini-2.5-flash"
+#   Flora: "claude-sonnet-4-6"
+#   Genome: "qwen-plus"
+#   Horizon: "deepseek-v3"
+#   Kade: "gemini-2.5-flash"
+#   Lovely: "claude-sonnet-4-6"
+#   Mira: "qwen-plus"
+#   Spark: "deepseek-v3"
