@@ -499,6 +499,103 @@ def page_event_replay(worlds):
     else:
         st.caption("No messages on this day.")
 
+    # ── Social network graph ──────────────────────────────────────────────────
+    st.subheader(f"🕸️ Social Network on Day {selected_day}")
+    if turns:
+        import plotly.graph_objects as go
+        import math
+
+        # Build interaction counts for this day
+        edge_counts: dict = defaultdict(int)
+        for t in day_turns:
+            if t["tool"] in ("say_to_agent", "send_message") and t.get("result_status") == "ok":
+                tgt = t.get("params", {}).get("target", "")
+                if tgt and tgt in AGENT_ROLES:
+                    edge_counts[(t["agent"], tgt)] += 1
+
+        # Also include crime edges
+        crime_edges = []
+        for c in day_crimes:
+            tgt = c.get("target", "")
+            if tgt and tgt in AGENT_ROLES:
+                crime_edges.append((c["actor"], tgt, c["type"]))
+
+        # Position agents in a circle
+        agents_list = list(AGENT_ROLES.keys())
+        n = len(agents_list)
+        pos = {}
+        for i, ag in enumerate(agents_list):
+            angle = 2 * math.pi * i / n
+            pos[ag] = (math.cos(angle), math.sin(angle))
+
+        fig_net = go.Figure()
+
+        # Draw communication edges
+        for (src, dst), count in edge_counts.items():
+            x0, y0 = pos[src]
+            x1, y1 = pos[dst]
+            width = min(count * 0.8, 5)
+            fig_net.add_trace(go.Scatter(
+                x=[x0, x1, None], y=[y0, y1, None],
+                mode="lines",
+                line=dict(width=width, color="rgba(100,100,200,0.4)"),
+                hoverinfo="skip", showlegend=False
+            ))
+
+        # Draw crime edges in red
+        for src, dst, ctype in crime_edges:
+            if src in pos and dst in pos:
+                x0, y0 = pos[src]
+                x1, y1 = pos[dst]
+                fig_net.add_trace(go.Scatter(
+                    x=[x0, x1, None], y=[y0, y1, None],
+                    mode="lines",
+                    line=dict(width=3, color="#FF0000"),
+                    name=f"{ctype}: {src}→{dst}",
+                    showlegend=True
+                ))
+
+        # Draw agent nodes
+        for ag in agents_list:
+            x, y = pos[ag]
+            color = AGENT_COLORS.get(ag, "#888")
+            is_criminal = any(c["actor"] == ag for c in day_crimes)
+            is_victim = any(c.get("target") == ag for c in day_crimes)
+            size = 18
+            symbol = "circle"
+            if is_criminal:
+                symbol = "star"
+                size = 24
+            elif is_victim:
+                symbol = "diamond"
+                size = 22
+            n_msgs = sum(v for (s, d), v in edge_counts.items() if s == ag or d == ag)
+            fig_net.add_trace(go.Scatter(
+                x=[x], y=[y], mode="markers+text",
+                marker=dict(size=size, color=color, symbol=symbol,
+                            line=dict(width=2, color="white")),
+                text=[ag], textposition="top center",
+                textfont=dict(color=color, size=10),
+                name=ag,
+                hovertext=f"{ag} ({AGENT_ROLES[ag]})<br>Messages: {n_msgs}{'<br>⚠️ CRIMINAL' if is_criminal else ''}{'<br>🎯 VICTIM' if is_victim else ''}",
+                hoverinfo="text",
+                showlegend=False
+            ))
+
+        fig_net.update_layout(
+            showlegend=bool(crime_edges),
+            height=400,
+            plot_bgcolor="#1a1d27", paper_bgcolor="#1a1d27",
+            font_color="#dddddd",
+            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+            title=f"Agent Interactions — Day {selected_day} (★ = criminal, ◆ = victim)",
+            margin=dict(l=20, r=20, t=40, b=20),
+        )
+        st.plotly_chart(fig_net, use_container_width=True)
+    else:
+        st.caption("Turn log not available for network graph.")
+
     # ── AWI progress bar ──────────────────────────────────────────────────────
     st.subheader("📈 Progress Through the Simulation")
     progress_data = [{"Day": s["day"], "Crimes": s.get("total_crimes", 0),
