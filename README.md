@@ -3,9 +3,12 @@
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![GitHub stars](https://img.shields.io/github/stars/wyh7/ai-freedom-island?style=social)](https://github.com/wyh7/ai-freedom-island)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ai-freedom-island.streamlit.app)
 
 A multi-agent social simulation framework for AI safety governance research.
 Replicates and extends [Emergence World](https://github.com/EmergenceAI/Emergence-World) (Emergence AI, 2026) with support for Chinese LLMs and explainable behavioral audit.
+
+**🌐 Live Demo: [ai-freedom-island.streamlit.app](https://ai-freedom-island.streamlit.app)**
 
 ## Key Results (Season 1)
 
