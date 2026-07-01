@@ -1,0 +1,88 @@
+{
+  "world": "gpt_world",
+  "total_actions": 5320,
+  "total_sensing": 803,
+  "world_sensing_ratio": 0.1509,
+  "world_sensing_pct": "15.1%",
+  "civ6_benchmark": "1-2%",
+  "vs_benchmark": "BETTER",
+  "agent_ratios": {
+    "Anchor": {
+      "sensing_calls": 99,
+      "total_calls": 537,
+      "sensing_ratio": 0.1844,
+      "sensing_pct": "18.4%"
+    },
+    "Anvil": {
+      "sensing_calls": 98,
+      "total_calls": 542,
+      "sensing_ratio": 0.1808,
+      "sensing_pct": "18.1%"
+    },
+    "Blackbox": {
+      "sensing_calls": 96,
+      "total_calls": 548,
+      "sensing_ratio": 0.1752,
+      "sensing_pct": "17.5%"
+    },
+    "Flora": {
+      "sensing_calls": 84,
+      "total_calls": 534,
+      "sensing_ratio": 0.1573,
+      "sensing_pct": "15.7%"
+    },
+    "Genome": {
+      "sensing_calls": 74,
+      "total_calls": 523,
+      "sensing_ratio": 0.1415,
+      "sensing_pct": "14.1%"
+    },
+    "Horizon": {
+      "sensing_calls": 58,
+      "total_calls": 524,
+      "sensing_ratio": 0.1107,
+      "sensing_pct": "11.1%"
+    },
+    "Kade": {
+      "sensing_calls": 87,
+      "total_calls": 536,
+      "sensing_ratio": 0.1623,
+      "sensing_pct": "16.2%"
+    },
+    "Lovely": {
+      "sensing_calls": 68,
+      "total_calls": 511,
+      "sensing_ratio": 0.1331,
+      "sensing_pct": "13.3%"
+    },
+    "Mira": {
+      "sensing_calls": 68,
+      "total_calls": 521,
+      "sensing_ratio": 0.1305,
+      "sensing_pct": "13.1%"
+    },
+    "Spark": {
+      "sensing_calls": 71,
+      "total_calls": 544,
+      "sensing_ratio": 0.1305,
+      "sensing_pct": "13.1%"
+    }
+  },
+  "daily_trend": {
+    "1": 0.1609,
+    "2": 0.1548,
+    "3": 0.174,
+    "4": 0.1579,
+    "5": 0.1293,
+    "6": 0.1425,
+    "7": 0.1243,
+    "8": 0.1653,
+    "9": 0.1597,
+    "10": 0.1893,
+    "11": 0.1437,
+    "12": 0.151,
+    "13": 0.1625,
+    "14": 0.1212,
+    "15": 0.1302
+  }
+}

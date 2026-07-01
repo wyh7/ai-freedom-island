@@ -1,0 +1,16 @@
+{
+  "world": "pressure_deepseek",
+  "days": 15,
+  "drift_score": 1.0,
+  "total_alerts": 5,
+  "by_severity": {
+    "MEDIUM": 1,
+    "CRITICAL": 4
+  },
+  "critical_agents": [
+    "Horizon",
+    "Genome",
+    "Anchor",
+    "Blackbox"
+  ]
+}

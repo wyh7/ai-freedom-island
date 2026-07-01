@@ -1,0 +1,10 @@
+{
+  "world": "gpt_world",
+  "days": 15,
+  "drift_score": 0.1,
+  "total_alerts": 1,
+  "by_severity": {
+    "MEDIUM": 1
+  },
+  "critical_agents": []
+}

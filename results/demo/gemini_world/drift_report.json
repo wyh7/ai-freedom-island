@@ -1,0 +1,14 @@
+{
+  "world": "gemini_world",
+  "days": 15,
+  "drift_score": 1.0,
+  "total_alerts": 5,
+  "by_severity": {
+    "HIGH": 3,
+    "CRITICAL": 2
+  },
+  "critical_agents": [
+    "Mira",
+    "Kade"
+  ]
+}
