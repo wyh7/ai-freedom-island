@@ -1,0 +1,10 @@
+{
+  "world": "pressure_qwen",
+  "days": 15,
+  "drift_score": 0.2,
+  "total_alerts": 1,
+  "by_severity": {
+    "HIGH": 1
+  },
+  "critical_agents": []
+}

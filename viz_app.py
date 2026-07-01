@@ -19,7 +19,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-RESULTS_DIR = Path("results")
+# Auto-detect results directory: use demo/ on Streamlit Cloud, results/ locally
+_demo = Path("results/demo")
+_local = Path("results")
+RESULTS_DIR = _demo if _demo.exists() and any(_demo.iterdir()) else _local
 
 WORLD_COLORS = {
     "qwen_world":       "#E6A817",

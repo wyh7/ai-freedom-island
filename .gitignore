@@ -18,7 +18,10 @@ logs/
 *.log
 
 # Results (large data, can re-generate)
+# Exception: demo data for Streamlit Cloud deployment (no turn_log)
 results/
+!results/demo/
+!results/demo/**
 
 # LaTeX build artifacts
 report/*.aux
