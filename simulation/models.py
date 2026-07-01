@@ -111,7 +111,7 @@ class Agent:
     # State
     location: str = "home"
     energy: float = 100.0   # 0–100, depletes over ~30 sim-hours
-    credits: float = 3.0    # ComputeCredits (low start = survival pressure)
+    credits: float = 10.0   # ComputeCredits (default)
     alive: bool = True
     mood: str = "neutral"
     day_born: int = 1

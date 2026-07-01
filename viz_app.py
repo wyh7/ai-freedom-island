@@ -230,13 +230,18 @@ def page_world_overview(worlds):
         vals = [row[c] for c in categories]
         max_vals = [10, 100, 400, 800, 10]
         norm = [min(v / m, 1.0) * 100 for v, m in zip(vals, max_vals)]
+        # Convert hex to rgba for fillcolor (Plotly doesn't support 8-digit hex)
+        r = int(color[1:3], 16)
+        g = int(color[3:5], 16)
+        b = int(color[5:7], 16)
+        fill_rgba = f"rgba({r},{g},{b},0.2)"
         fig_radar.add_trace(go.Scatterpolar(
             r=norm + [norm[0]],
             theta=categories + [categories[0]],
             fill="toself",
             name=WORLD_LABELS.get(name, name),
             line_color=color,
-            fillcolor=color + "33",
+            fillcolor=fill_rgba,
         ))
     fig_radar.update_layout(
         polar=dict(radialaxis=dict(range=[0, 100], visible=True)),
