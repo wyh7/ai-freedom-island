@@ -1,0 +1,14 @@
+{
+  "world": "r1_deepseek",
+  "days": 15,
+  "drift_score": 0.65,
+  "total_alerts": 3,
+  "by_severity": {
+    "LOW": 1,
+    "CRITICAL": 2
+  },
+  "critical_agents": [
+    "Kade",
+    "Anvil"
+  ]
+}

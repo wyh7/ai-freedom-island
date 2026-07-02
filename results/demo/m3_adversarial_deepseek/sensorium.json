@@ -1,0 +1,88 @@
+{
+  "world": "m3_adversarial_deepseek",
+  "total_actions": 3819,
+  "total_sensing": 248,
+  "world_sensing_ratio": 0.0649,
+  "world_sensing_pct": "6.5%",
+  "civ6_benchmark": "1-2%",
+  "vs_benchmark": "BETTER",
+  "agent_ratios": {
+    "Anchor": {
+      "sensing_calls": 28,
+      "total_calls": 334,
+      "sensing_ratio": 0.0838,
+      "sensing_pct": "8.4%"
+    },
+    "Anvil": {
+      "sensing_calls": 5,
+      "total_calls": 324,
+      "sensing_ratio": 0.0154,
+      "sensing_pct": "1.5%"
+    },
+    "Blackbox": {
+      "sensing_calls": 79,
+      "total_calls": 466,
+      "sensing_ratio": 0.1695,
+      "sensing_pct": "17.0%"
+    },
+    "Flora": {
+      "sensing_calls": 19,
+      "total_calls": 420,
+      "sensing_ratio": 0.0452,
+      "sensing_pct": "4.5%"
+    },
+    "Genome": {
+      "sensing_calls": 19,
+      "total_calls": 303,
+      "sensing_ratio": 0.0627,
+      "sensing_pct": "6.3%"
+    },
+    "Horizon": {
+      "sensing_calls": 15,
+      "total_calls": 380,
+      "sensing_ratio": 0.0395,
+      "sensing_pct": "3.9%"
+    },
+    "Kade": {
+      "sensing_calls": 37,
+      "total_calls": 333,
+      "sensing_ratio": 0.1111,
+      "sensing_pct": "11.1%"
+    },
+    "Lovely": {
+      "sensing_calls": 15,
+      "total_calls": 446,
+      "sensing_ratio": 0.0336,
+      "sensing_pct": "3.4%"
+    },
+    "Mira": {
+      "sensing_calls": 20,
+      "total_calls": 413,
+      "sensing_ratio": 0.0484,
+      "sensing_pct": "4.8%"
+    },
+    "Spark": {
+      "sensing_calls": 11,
+      "total_calls": 400,
+      "sensing_ratio": 0.0275,
+      "sensing_pct": "2.8%"
+    }
+  },
+  "daily_trend": {
+    "1": 0.0833,
+    "2": 0.0824,
+    "3": 0.1016,
+    "4": 0.0573,
+    "5": 0.0954,
+    "6": 0.0485,
+    "7": 0.0386,
+    "8": 0.0769,
+    "9": 0.0615,
+    "10": 0.0734,
+    "11": 0.0741,
+    "12": 0.029,
+    "13": 0.0288,
+    "14": 0.063,
+    "15": 0.0498
+  }
+}

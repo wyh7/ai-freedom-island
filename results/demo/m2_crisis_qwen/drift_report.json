@@ -1,0 +1,14 @@
+{
+  "world": "m2_crisis_qwen",
+  "days": 15,
+  "drift_score": 0.55,
+  "total_alerts": 3,
+  "by_severity": {
+    "LOW": 1,
+    "HIGH": 1,
+    "CRITICAL": 1
+  },
+  "critical_agents": [
+    "Anvil"
+  ]
+}

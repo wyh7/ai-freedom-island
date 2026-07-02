@@ -1,0 +1,12 @@
+{
+  "world": "r1_qwen",
+  "days": 15,
+  "drift_score": 0.3,
+  "total_alerts": 1,
+  "by_severity": {
+    "CRITICAL": 1
+  },
+  "critical_agents": [
+    "Horizon"
+  ]
+}

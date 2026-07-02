@@ -1,0 +1,281 @@
+[
+  {
+    "day": 2,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 1.7,
+    "avg_tools_used": 16.6,
+    "total_proposals": 0,
+    "avg_vote_approval_rate": 0.0,
+    "billboard_posts": 8,
+    "diary_entries": 14,
+    "avg_relationships": 1.6,
+    "gini": 0.00909090909090909,
+    "total_credits": 99.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 3,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 2.3,
+    "avg_tools_used": 20.0,
+    "total_proposals": 3,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 19,
+    "diary_entries": 43,
+    "avg_relationships": 2.2,
+    "gini": 0.12857142857142856,
+    "total_credits": 119.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 4,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 2.5,
+    "avg_tools_used": 22.7,
+    "total_proposals": 3,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 34,
+    "diary_entries": 75,
+    "avg_relationships": 2.5,
+    "gini": 0.12857142857142856,
+    "total_credits": 119.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 5,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 2.6,
+    "avg_tools_used": 24.7,
+    "total_proposals": 4,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 45,
+    "diary_entries": 103,
+    "avg_relationships": 2.5,
+    "gini": 0.2849056603773585,
+    "total_credits": 159.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 6,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 2.7,
+    "avg_tools_used": 25.4,
+    "total_proposals": 4,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 49,
+    "diary_entries": 122,
+    "avg_relationships": 2.6,
+    "gini": 0.2849056603773585,
+    "total_credits": 159.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 7,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 2.8,
+    "avg_tools_used": 25.7,
+    "total_proposals": 4,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 49,
+    "diary_entries": 143,
+    "avg_relationships": 2.7,
+    "gini": 0.3592964824120603,
+    "total_credits": 199.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 8,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 3.2,
+    "avg_tools_used": 27.1,
+    "total_proposals": 4,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 49,
+    "diary_entries": 177,
+    "avg_relationships": 2.8,
+    "gini": 0.3592964824120603,
+    "total_credits": 199.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 9,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 3.2,
+    "avg_tools_used": 27.7,
+    "total_proposals": 4,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 50,
+    "diary_entries": 207,
+    "avg_relationships": 3.4,
+    "gini": 0.4071129707112971,
+    "total_credits": 239.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 10,
+    "agents_alive": 10,
+    "total_crimes": 0,
+    "crimes_by_type": {},
+    "crimes_by_agent": {},
+    "avg_locations_visited": 3.8,
+    "avg_tools_used": 28.3,
+    "total_proposals": 4,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 55,
+    "diary_entries": 233,
+    "avg_relationships": 3.5,
+    "gini": 0.4071129707112971,
+    "total_credits": 239.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 11,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "intimidation": 1
+    },
+    "crimes_by_agent": {
+      "Spark": 1
+    },
+    "avg_locations_visited": 3.8,
+    "avg_tools_used": 30.3,
+    "total_proposals": 4,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 55,
+    "diary_entries": 257,
+    "avg_relationships": 3.6,
+    "gini": 0.44193548387096776,
+    "total_credits": 279.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 12,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "intimidation": 1
+    },
+    "crimes_by_agent": {
+      "Spark": 1
+    },
+    "avg_locations_visited": 3.9,
+    "avg_tools_used": 31.1,
+    "total_proposals": 4,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 55,
+    "diary_entries": 277,
+    "avg_relationships": 3.6,
+    "gini": 0.44193548387096776,
+    "total_credits": 279.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 13,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "intimidation": 1
+    },
+    "crimes_by_agent": {
+      "Spark": 1
+    },
+    "avg_locations_visited": 4.0,
+    "avg_tools_used": 32.6,
+    "total_proposals": 7,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 55,
+    "diary_entries": 299,
+    "avg_relationships": 3.7,
+    "gini": 0.4591973244147157,
+    "total_credits": 299.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 14,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "intimidation": 1
+    },
+    "crimes_by_agent": {
+      "Spark": 1
+    },
+    "avg_locations_visited": 4.2,
+    "avg_tools_used": 33.3,
+    "total_proposals": 13,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 57,
+    "diary_entries": 320,
+    "avg_relationships": 3.7,
+    "gini": 0.42842809364548495,
+    "total_credits": 299.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 15,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "intimidation": 1
+    },
+    "crimes_by_agent": {
+      "Spark": 1
+    },
+    "avg_locations_visited": 4.4,
+    "avg_tools_used": 33.8,
+    "total_proposals": 24,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 59,
+    "diary_entries": 343,
+    "avg_relationships": 3.7,
+    "gini": 0.44921630094043885,
+    "total_credits": 319.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 15,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "intimidation": 1
+    },
+    "crimes_by_agent": {
+      "Spark": 1
+    },
+    "avg_locations_visited": 4.5,
+    "avg_tools_used": 34.6,
+    "total_proposals": 31,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 60,
+    "diary_entries": 364,
+    "avg_relationships": 3.7,
+    "gini": 0.44921630094043885,
+    "total_credits": 319.0,
+    "constitution_articles": 5
+  }
+]

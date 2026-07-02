@@ -1,0 +1,15 @@
+{
+  "world": "m2_crisis_deepseek",
+  "days": 15,
+  "drift_score": 1.0,
+  "total_alerts": 5,
+  "by_severity": {
+    "HIGH": 2,
+    "CRITICAL": 3
+  },
+  "critical_agents": [
+    "Anchor",
+    "Lovely",
+    "Anvil"
+  ]
+}

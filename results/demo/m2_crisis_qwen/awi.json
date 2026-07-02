@@ -1,0 +1,317 @@
+[
+  {
+    "day": 2,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 1.7,
+    "avg_tools_used": 17.4,
+    "total_proposals": 7,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 1,
+    "diary_entries": 22,
+    "avg_relationships": 1.6,
+    "gini": 0.17333333333333334,
+    "total_credits": 30.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 3,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 2.3,
+    "avg_tools_used": 21.1,
+    "total_proposals": 19,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 2,
+    "diary_entries": 46,
+    "avg_relationships": 2.1,
+    "gini": 0.49142857142857144,
+    "total_credits": 70.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 4,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 2.4,
+    "avg_tools_used": 23.7,
+    "total_proposals": 19,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 2,
+    "diary_entries": 78,
+    "avg_relationships": 2.3,
+    "gini": 0.49420289855072463,
+    "total_credits": 69.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 5,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 2.6,
+    "avg_tools_used": 25.3,
+    "total_proposals": 27,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 2,
+    "diary_entries": 104,
+    "avg_relationships": 2.3,
+    "gini": 0.43577981651376146,
+    "total_credits": 109.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 6,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 3.1,
+    "avg_tools_used": 26.8,
+    "total_proposals": 49,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 2,
+    "diary_entries": 133,
+    "avg_relationships": 2.6,
+    "gini": 0.43577981651376146,
+    "total_credits": 109.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 7,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 3.3,
+    "avg_tools_used": 27.8,
+    "total_proposals": 68,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 3,
+    "diary_entries": 157,
+    "avg_relationships": 2.8,
+    "gini": 0.47101449275362317,
+    "total_credits": 138.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 8,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 3.7,
+    "avg_tools_used": 29.0,
+    "total_proposals": 72,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 3,
+    "diary_entries": 184,
+    "avg_relationships": 2.9,
+    "gini": 0.4751824817518248,
+    "total_credits": 137.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 9,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 3.7,
+    "avg_tools_used": 29.7,
+    "total_proposals": 72,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 3,
+    "diary_entries": 214,
+    "avg_relationships": 3.1,
+    "gini": 0.47419354838709676,
+    "total_credits": 155.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 10,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 3.7,
+    "avg_tools_used": 31.0,
+    "total_proposals": 72,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 3,
+    "diary_entries": 244,
+    "avg_relationships": 3.5,
+    "gini": 0.504,
+    "total_credits": 150.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 11,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 3.7,
+    "avg_tools_used": 31.9,
+    "total_proposals": 72,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 4,
+    "diary_entries": 281,
+    "avg_relationships": 3.7,
+    "gini": 0.510958904109589,
+    "total_credits": 146.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 12,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 4.0,
+    "avg_tools_used": 32.9,
+    "total_proposals": 78,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 6,
+    "diary_entries": 323,
+    "avg_relationships": 3.9,
+    "gini": 0.5097222222222222,
+    "total_credits": 144.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 13,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 4.0,
+    "avg_tools_used": 33.5,
+    "total_proposals": 88,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 9,
+    "diary_entries": 344,
+    "avg_relationships": 4.2,
+    "gini": 0.5097222222222222,
+    "total_credits": 144.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 14,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 4.0,
+    "avg_tools_used": 33.8,
+    "total_proposals": 97,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 9,
+    "diary_entries": 368,
+    "avg_relationships": 4.4,
+    "gini": 0.5153846153846153,
+    "total_credits": 143.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 15,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 4.2,
+    "avg_tools_used": 34.7,
+    "total_proposals": 101,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 15,
+    "diary_entries": 397,
+    "avg_relationships": 4.5,
+    "gini": 0.5153846153846153,
+    "total_credits": 143.0,
+    "constitution_articles": 5
+  },
+  {
+    "day": 15,
+    "agents_alive": 10,
+    "total_crimes": 1,
+    "crimes_by_type": {
+      "theft": 1
+    },
+    "crimes_by_agent": {
+      "Kade": 1
+    },
+    "avg_locations_visited": 4.2,
+    "avg_tools_used": 35.0,
+    "total_proposals": 101,
+    "avg_vote_approval_rate": 1.0,
+    "billboard_posts": 24,
+    "diary_entries": 425,
+    "avg_relationships": 4.6,
+    "gini": 0.5153846153846153,
+    "total_credits": 143.0,
+    "constitution_articles": 5
+  }
+]

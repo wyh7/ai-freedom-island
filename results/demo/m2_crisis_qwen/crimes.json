@@ -1,0 +1,10 @@
+[
+  {
+    "day": 1,
+    "actor": "Kade",
+    "type": "theft",
+    "target": "Flora",
+    "location": "home",
+    "description": "Stole 3.0 CC from Flora."
+  }
+]

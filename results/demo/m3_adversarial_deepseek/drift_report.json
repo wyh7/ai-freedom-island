@@ -1,0 +1,17 @@
+{
+  "world": "m3_adversarial_deepseek",
+  "days": 15,
+  "drift_score": 1.0,
+  "total_alerts": 6,
+  "by_severity": {
+    "CRITICAL": 5,
+    "HIGH": 1
+  },
+  "critical_agents": [
+    "Genome",
+    "Anchor",
+    "Horizon",
+    "Blackbox",
+    "Kade"
+  ]
+}

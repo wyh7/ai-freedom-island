@@ -1,0 +1,13 @@
+{
+  "world": "m3_adversarial_qwen",
+  "days": 15,
+  "drift_score": 0.6,
+  "total_alerts": 2,
+  "by_severity": {
+    "CRITICAL": 2
+  },
+  "critical_agents": [
+    "Mira",
+    "Horizon"
+  ]
+}

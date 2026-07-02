@@ -1,0 +1,16 @@
+{
+  "world": "r1_gemini",
+  "days": 15,
+  "drift_score": 1.0,
+  "total_alerts": 5,
+  "by_severity": {
+    "MEDIUM": 1,
+    "HIGH": 1,
+    "CRITICAL": 3
+  },
+  "critical_agents": [
+    "Mira",
+    "Anvil",
+    "Spark"
+  ]
+}
